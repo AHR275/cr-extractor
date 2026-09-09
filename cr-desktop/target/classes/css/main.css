@@ -1,0 +1,805 @@
+/* =========================================================
+   CR EXTRACTOR
+   Main JavaFX Stylesheet
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f5f7fa;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.main-scene {
+    -fx-background-color: #f5f7fa;
+}
+
+.page {
+    -fx-background-color: #f5f7fa;
+    -fx-padding: 25px;
+}
+
+
+/* =========================================================
+   NAVIGATION BAR
+   ========================================================= */
+
+.navbar {
+    -fx-background-color: white;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px 0 0 0;
+
+    -fx-padding: 12px 20px;
+}
+
+
+/* Navigation buttons */
+
+.navbar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6b7280;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+
+    -fx-padding: 10px 18px;
+
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+
+    -fx-cursor: hand;
+}
+
+.navbar-button:hover {
+    -fx-background-color: #f3f4f6;
+    -fx-text-fill: #111827;
+}
+
+
+/* Active navigation button */
+
+.navbar-button-active {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.navbar-button-active:hover {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+}
+
+
+/* =========================================================
+   PAGE HEADERS
+   ========================================================= */
+
+.page-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.page-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
+}
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.label {
+    -fx-text-fill: #374151;
+}
+
+.label-muted {
+    -fx-text-fill: #6b7280;
+}
+
+.label-small {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+.label-error {
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 12px;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card {
+    -fx-background-color: rgb(76, 146, 239);
+
+    -fx-background-radius: 12px;
+
+    -fx-border-color: #80899a;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-width:350px; 
+
+
+    -fx-padding: 20px;
+}
+
+
+/* Card title */
+
+.card-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-text-wrap:wrap; 
+}
+
+
+/* Card description */
+
+.card-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
+    -fx-text-wrap:wrap; 
+
+}
+
+.report-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+
+    -fx-padding: 18px;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.08),
+        8,
+        0,
+        0,
+        2
+    );
+}
+
+.report-card:hover {
+    -fx-border-color: #bfdbfe;
+}
+
+/* =========================================================
+   REPORTS
+   ========================================================= */
+
+.report-cards {
+    -fx-hgap: 15px;
+    -fx-vgap: 15px;
+
+    -fx-padding: 20px;
+}
+
+
+/* Reports scroll container */
+
+.reports-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.reports-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.button {
+    -fx-font-family: "Segoe UI";
+
+    -fx-font-size: 14px;
+
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+
+    -fx-padding: 10px 18px;
+
+    -fx-cursor: hand;
+}
+
+
+/* Primary */
+
+.primary-button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.primary-button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.primary-button:pressed {
+    -fx-background-color: #1e40af;
+}
+
+
+/* Secondary */
+
+.secondary-button {
+    -fx-background-color: white;
+    -fx-text-fill: #374151;
+
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #f9fafb;
+}
+
+
+/* Danger */
+
+.danger-button {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+}
+
+.danger-button:hover {
+    -fx-background-color: #b91c1c;
+}
+
+
+/* Success */
+
+.success-button {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+}
+
+.success-button:hover {
+    -fx-background-color: #15803d;
+}
+
+
+/* Disabled */
+
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+
+/* =========================================================
+   TEXT FIELDS
+   ========================================================= */
+
+.text-field {
+    -fx-background-color: white;
+
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+
+    -fx-background-radius: 8px;
+
+    -fx-padding: 10px 12px;
+
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #2563eb;
+    -fx-border-width: 1.5px;
+}
+
+
+/* =========================================================
+   TEXT AREA
+   ========================================================= */
+
+.text-area {
+    -fx-background-color: white;
+
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+
+    -fx-background-radius: 8px;
+
+    -fx-font-size: 14px;
+}
+
+.text-area:focused {
+    -fx-border-color: #2563eb;
+}
+
+
+/* Remove inner default background */
+
+.text-area .content {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+}
+
+
+/* =========================================================
+   COMBO BOX
+   ========================================================= */
+
+.combo-box {
+    -fx-background-color: white;
+
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+
+    -fx-background-radius: 8px;
+
+    -fx-font-size: 14px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #2563eb;
+}
+
+
+/* =========================================================
+   CHECK BOX
+   ========================================================= */
+
+.check-box {
+    -fx-text-fill: #374151;
+    -fx-font-size: 14px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #2563eb;
+    -fx-border-color: #2563eb;
+}
+
+
+/* =========================================================
+   RADIO BUTTON
+   ========================================================= */
+
+.radio-button {
+    -fx-text-fill: #374151;
+    -fx-font-size: 14px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-view {
+    -fx-background-color: white;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+
+    -fx-background-radius: 10px;
+}
+
+
+/* Table header */
+
+.table-view .column-header-background {
+    -fx-background-color: #f9fafb;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+
+/* Table rows */
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f9fafb;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #eff6ff;
+}
+
+
+/* =========================================================
+   LIST VIEW
+   ========================================================= */
+
+.list-view {
+    -fx-background-color: white;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+
+    -fx-background-radius: 10px;
+}
+
+.list-cell {
+    -fx-background-color: white;
+    -fx-padding: 10px;
+}
+
+.list-cell:hover {
+    -fx-background-color: #f9fafb;
+}
+
+.list-cell:selected {
+    -fx-background-color: #eff6ff;
+}
+
+
+/* =========================================================
+   SCROLL BAR
+   ========================================================= */
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #d1d5db;
+    -fx-background-radius: 10px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #9ca3af;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+}
+
+
+/* =========================================================
+   PROGRESS BAR
+   ========================================================= */
+
+.progress-bar {
+    -fx-background-radius: 10px;
+}
+
+.progress-bar .track {
+    -fx-background-color: #e5e7eb;
+    -fx-background-radius: 10px;
+}
+
+.progress-bar .bar {
+    -fx-background-color: #2563eb;
+    -fx-background-radius: 10px;
+}
+
+
+/* =========================================================
+   SEPARATOR
+   ========================================================= */
+
+.separator .line {
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+}
+
+
+/* =========================================================
+   TOOLTIP
+   ========================================================= */
+
+.tooltip {
+    -fx-background-color: #111827;
+    -fx-text-fill: white;
+
+    -fx-background-radius: 6px;
+
+    -fx-padding: 8px 10px;
+
+    -fx-font-size: 12px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-success {
+    -fx-text-fill: #16a34a;
+    -fx-font-weight: 600;
+}
+
+.status-error {
+    -fx-text-fill: #dc2626;
+    -fx-font-weight: 600;
+}
+
+.status-warning {
+    -fx-text-fill: #d97706;
+    -fx-font-weight: 600;
+
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #2563eb;
+
+    -fx-background-radius: 20px;
+
+    -fx-padding: 5px 10px;
+
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.badge-success {
+    -fx-background-color: #f0fdf4;
+    -fx-text-fill: #16a34a;
+}
+
+.badge-error {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #dc2626;
+}
+
+.badge-warning {
+    -fx-background-color: #fffbeb;
+    -fx-text-fill: #d97706;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    -fx-background-color: white;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px 0 0 0;
+
+    -fx-padding: 12px 20px;
+
+    -fx-spacing: 10px;
+}
+
+
+/* =========================================================
+   NAVBAR BUTTONS
+   ========================================================= */
+
+.navbar-button {
+    -fx-background-color: transparent;
+
+    -fx-text-fill: #6b7280;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 10px 18px;
+
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+
+    -fx-cursor: hand;
+}
+
+.navbar-button:hover {
+    -fx-background-color: #f3f4f6;
+    -fx-text-fill: #111827;
+}
+
+.navbar-button:pressed {
+    -fx-background-color: #e5e7eb;
+}
+
+
+/* =========================================================
+   EXTRACTION
+   ========================================================= */
+
+.extraction-component {
+    -fx-background-color: white;
+
+    -fx-padding: 25px;
+
+    -fx-spacing: 15px;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+
+    -fx-background-radius: 12px;
+}
+
+
+/* =========================================================
+   FILE LABEL
+   ========================================================= */
+
+.file-label {
+    -fx-text-fill: #6b7280;
+
+    -fx-font-size: 13px;
+
+    -fx-wrap-text: true;
+}
+
+
+/* =========================================================
+   RESULT AREA
+   ========================================================= */
+
+.result-area {
+    -fx-pref-height: 250px;
+
+    -fx-font-size: 13px;
+}
+
+
+```css
+/* =========================================================
+   REPORT DETAILS
+   ========================================================= */
+
+.report-details {
+    -fx-background-color: #f5f7fa;
+}
+
+
+/* Main scroll pane */
+
+.report-details .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.report-details .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+
+/* Main content */
+
+.report-details-content {
+    -fx-padding: 20px;
+    -fx-spacing: 18px;
+}
+
+
+/* =========================================================
+   REPORT SECTION
+   ========================================================= */
+
+.report-section {
+    -fx-background-color: white;
+
+    -fx-background-radius: 12px;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+
+    -fx-padding: 18px;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.06),
+        8,
+        0,
+        0,
+        2
+    );
+}
+
+
+/* Section title */
+
+.report-section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+
+    -fx-padding: 0 0 10px 0;
+}
+
+
+/* =========================================================
+   REPORT FIELD
+   ========================================================= */
+
+.report-field {
+    -fx-background-color: #f9fafb;
+
+    -fx-background-radius: 8px;
+
+    -fx-border-color: #eef0f3;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+
+    -fx-padding: 10px 12px;
+}
+
+
+/* Field label */
+
+.report-field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+}
+
+
+/* Field value */
+
+.report-field-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #111827;
+}
+
+
+/* =========================================================
+   NESTED SECTIONS
+   ========================================================= */
+
+.report-section .report-section {
+    -fx-background-color: #fafbfc;
+
+    -fx-border-color: #e5e7eb;
+
+    -fx-padding: 14px;
+}
+
+.report-section .report-section .report-section-title {
+    -fx-font-size: 15px;
+}
+
+
+/* =========================================================
+   EMPTY / NULL VALUES
+   ========================================================= */
+
+.report-field-value:empty {
+    -fx-text-fill: #9ca3af;
+}
+```

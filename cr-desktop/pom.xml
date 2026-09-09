@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>app</groupId>
+        <artifactId>crextractor</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+
+    <artifactId>cr-desktop</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>app</groupId>
+            <artifactId>cr-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+            <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>${javafx.version}</version>
+    </dependency>
+
+    </dependencies>
+
+    <build>
+    <plugins>
+
+        <plugin>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-maven-plugin</artifactId>
+            <version>0.0.8</version>
+
+            <configuration>
+                <mainClass>
+                    app.desktop.Main
+                </mainClass>
+            </configuration>
+
+        </plugin>
+
+    </plugins>
+
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+        </resource>
+    </resources>
+
+</build>
+
+
+</project>

@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>app</groupId>
+        <artifactId>crextractor</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+
+    <artifactId>cr-cli</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>app</groupId>
+            <artifactId>cr-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+
+                <configuration>
+                    <mainClass>
+                        com.crextractor.cli.Main
+                    </mainClass>
+                </configuration>
+
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

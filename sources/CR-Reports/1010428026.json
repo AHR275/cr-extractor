@@ -1,0 +1,689 @@
+{
+  "data" : {
+    "crInformation" : {
+      "isRestricted" : {
+        "labels" : {
+          "ar" : "مقيد",
+          "en" : "Is Restricted"
+        },
+        "values" : {
+          "ar" : false,
+          "en" : false
+        }
+      },
+      "crNationalNumber" : {
+        "labels" : {
+          "ar" : "الرقم الوطني الموحد",
+          "en" : "CR National Number"
+        },
+        "values" : {
+          "ar" : "7001726590",
+          "en" : "7001726590"
+        }
+      },
+      "crNumber" : {
+        "labels" : {
+          "ar" : "رقم السجل التجاري",
+          "en" : "CR Number"
+        },
+        "values" : {
+          "ar" : "1010428026",
+          "en" : "1010428026"
+        }
+      },
+      "encryptedCrNumber" : {
+        "labels" : {
+          "ar" : "الرقم المشفر للسجل التجاري",
+          "en" : "Encrypted CR Number"
+        },
+        "values" : {
+          "ar" : "NndPTmZJWi83dWIraE1aaVdSYlNvQT09",
+          "en" : "NndPTmZJWi83dWIraE1aaVdSYlNvQT09"
+        }
+      },
+      "ownerName" : {
+        "labels" : {
+          "ar" : "اسم المالك",
+          "en" : "Owner Name"
+        },
+        "values" : {
+          "ar" : "اكرم عوني محمد ربايعه",
+          "en" : "AKRAM   RABAYAH"
+        }
+      },
+      "ownerIdentifierNumber" : {
+        "labels" : {
+          "ar" : "رقم هوية المالك",
+          "en" : "Owner Identifier Number"
+        },
+        "values" : {
+          "ar" : "2273510921",
+          "en" : "2273510921"
+        }
+      },
+      "ownerIdentifierTypeName" : {
+        "labels" : {
+          "ar" : "اسم نوع هوية المالك",
+          "en" : "Owner Identifier Type Name"
+        },
+        "values" : {
+          "ar" : "هوية مقيم",
+          "en" : "Resident ID"
+        }
+      },
+      "versionNo" : {
+        "labels" : {
+          "ar" : "رقم الإصدار",
+          "en" : "Version No"
+        },
+        "values" : {
+          "ar" : 7,
+          "en" : 7
+        }
+      },
+      "entityFullName" : {
+        "labels" : {
+          "ar" : "الاسم الكامل للمنشأة",
+          "en" : "Entity Full Name"
+        },
+        "values" : {
+          "ar" : "مؤسسة قمة لمار للمقاولات",
+          "en" : "qimmat limar Establishment For Contracting"
+        }
+      },
+      "capital" : {
+        "labels" : {
+          "ar" : "رأس المال",
+          "en" : "Capital"
+        },
+        "values" : {
+          "ar" : 25000,
+          "en" : 25000
+        }
+      },
+      "companyDuration" : {
+        "labels" : {
+          "ar" : "مدة الشركة",
+          "en" : "Company Duration"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      },
+      "isMain" : {
+        "labels" : {
+          "ar" : "رئيسي",
+          "en" : "Is Main"
+        },
+        "values" : {
+          "ar" : true,
+          "en" : true
+        }
+      },
+      "mainCRNationalNumber" : {
+        "labels" : {
+          "ar" : null,
+          "en" : "Main CRNational Number"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      },
+      "mainCRNumber" : {
+        "labels" : {
+          "ar" : null,
+          "en" : "Main CRNumber"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      },
+      "isLicenseBased" : {
+        "labels" : {
+          "ar" : "قائم على ترخيص",
+          "en" : "Is License Based"
+        },
+        "values" : {
+          "ar" : false,
+          "en" : false
+        }
+      },
+      "inLiquidationProcess" : {
+        "labels" : {
+          "ar" : "تحت التصفية",
+          "en" : "In Liquidation Process"
+        },
+        "values" : {
+          "ar" : false,
+          "en" : false
+        }
+      },
+      "hasEcommerce" : {
+        "labels" : {
+          "ar" : "لديه تجارة إلكترونية",
+          "en" : "Has Ecommerce"
+        },
+        "values" : {
+          "ar" : false,
+          "en" : false
+        }
+      },
+      "isListed" : {
+        "labels" : {
+          "ar" : "مدرج",
+          "en" : "Is Listed"
+        },
+        "values" : {
+          "ar" : false,
+          "en" : false
+        }
+      },
+      "entityNameLang" : {
+        "entityNameLangID" : {
+          "labels" : {
+            "ar" : "معرف لغة اسم المنشأة",
+            "en" : "Entity Name Lang ID"
+          },
+          "values" : {
+            "ar" : 1,
+            "en" : 1
+          }
+        },
+        "entityNameLangDesc" : {
+          "labels" : {
+            "ar" : "وصف لغة اسم المنشأة",
+            "en" : "Entity Name Lang Desc"
+          },
+          "values" : {
+            "ar" : "اللغة العربية",
+            "en" : "Arabic Language"
+          }
+        }
+      },
+      "entityType" : {
+        "entityTypeID" : {
+          "labels" : {
+            "ar" : "معرف نوع المنشأة",
+            "en" : "Entity Type ID"
+          },
+          "values" : {
+            "ar" : 2,
+            "en" : 2
+          }
+        },
+        "entityTypeDesc" : {
+          "labels" : {
+            "ar" : "وصف نوع المنشأة",
+            "en" : "Entity Type Desc"
+          },
+          "values" : {
+            "ar" : "مؤسسة",
+            "en" : "Establishment"
+          }
+        }
+      },
+      "capitalCurrency" : {
+        "capitalCurrencyID" : {
+          "labels" : {
+            "ar" : "معرف عملة رأس المال",
+            "en" : "Capital Currency ID"
+          },
+          "values" : {
+            "ar" : 1,
+            "en" : 1
+          }
+        },
+        "capitalCurrencyDesc" : {
+          "labels" : {
+            "ar" : "وصف عملة رأس المال",
+            "en" : "Capital Currency Desc"
+          },
+          "values" : {
+            "ar" : "ريال سعودي",
+            "en" : "Saudi Riyal"
+          }
+        }
+      },
+      "companyForm" : {
+        "labels" : {
+          "ar" : "الشكل القانوني للشركة",
+          "en" : "Company Form"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      },
+      "companyCharacterList" : [ ],
+      "partnersNationality" : {
+        "partnersNationalityID" : {
+          "labels" : {
+            "ar" : "معرف جنسية الشركاء",
+            "en" : "Partners Nationality ID"
+          },
+          "values" : {
+            "ar" : 2,
+            "en" : 2
+          }
+        },
+        "partnersNationalityDesc" : {
+          "labels" : {
+            "ar" : "وصف جنسية الشركاء",
+            "en" : "Partners Nationality Desc"
+          },
+          "values" : {
+            "ar" : "خليجية",
+            "en" : "Gulf"
+          }
+        }
+      },
+      "lastModificationDate" : {
+        "lastModificationDateGregorian" : {
+          "labels" : {
+            "ar" : "تاريخ آخر تعديل الميلادي",
+            "en" : "Last Modification Date Gregorian"
+          },
+          "values" : {
+            "ar" : "2026-06-17",
+            "en" : "2026-06-17"
+          }
+        },
+        "lastModificationDateHijri" : {
+          "labels" : {
+            "ar" : "تاريخ آخر تعديل الهجري",
+            "en" : "Last Modification Date Hijri"
+          },
+          "values" : {
+            "ar" : "02-01-1448",
+            "en" : "02-01-1448"
+          }
+        }
+      },
+      "crIssueDate" : {
+        "crIssueDateGregorian" : {
+          "labels" : {
+            "ar" : "تاريخ إصدار السجل التجاري الميلادي",
+            "en" : "CR Issue Date Gregorian"
+          },
+          "values" : {
+            "ar" : "2014-11-13",
+            "en" : "2014-11-13"
+          }
+        },
+        "crIssueDateHijri" : {
+          "labels" : {
+            "ar" : "تاريخ إصدار السجل التجاري الهجري",
+            "en" : "CR Issue Date Hijri"
+          },
+          "values" : {
+            "ar" : "20-01-1436",
+            "en" : "20-01-1436"
+          }
+        }
+      },
+      "crConfirmDate" : {
+        "crConfirmDateGregorian" : {
+          "labels" : {
+            "ar" : "تاريخ تأكيد السجل التجاري الميلادي",
+            "en" : "CR Confirm Date Gregorian"
+          },
+          "values" : {
+            "ar" : "2027-07-15",
+            "en" : "2027-07-15"
+          }
+        },
+        "crConfirmDateHijri" : {
+          "labels" : {
+            "ar" : "تاريخ تأكيد السجل التجاري الهجري",
+            "en" : "CR Confirm Date Hijri"
+          },
+          "values" : {
+            "ar" : "11-02-1449",
+            "en" : "11-02-1449"
+          }
+        }
+      },
+      "crStatus" : {
+        "crStatusID" : {
+          "labels" : {
+            "ar" : "معرف حالة السجل التجاري",
+            "en" : "CR Status ID"
+          },
+          "values" : {
+            "ar" : 1,
+            "en" : 1
+          }
+        },
+        "crStatusDesc" : {
+          "labels" : {
+            "ar" : "وصف حالة السجل التجاري",
+            "en" : "CR Status Desc"
+          },
+          "values" : {
+            "ar" : "نشط",
+            "en" : "Active"
+          }
+        }
+      },
+      "crDeleteDate" : {
+        "labels" : {
+          "ar" : "تاريخ حذف السجل التجاري",
+          "en" : "CR Delete Date"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      },
+      "crDeleteReasons" : [ ]
+    },
+    "crActivities" : {
+      "fullActivitiesText" : {
+        "labels" : {
+          "ar" : "النص الكامل للأنشطة",
+          "en" : "Full Activities Text"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      },
+      "activitiesType" : {
+        "activitiesTypeID" : {
+          "labels" : {
+            "ar" : "معرف نوع الأنشطة",
+            "en" : "Activities Type ID"
+          },
+          "values" : {
+            "ar" : "2",
+            "en" : "2"
+          }
+        },
+        "activitiesTypeDescription" : {
+          "labels" : {
+            "ar" : "وصف نوع الأنشطة",
+            "en" : "Activities Type Description"
+          },
+          "values" : {
+            "ar" : "Isic",
+            "en" : "Isic"
+          }
+        }
+      },
+      "activityList" : [ {
+        "activityID" : "410010",
+        "activityDescriptionAr" : "الإنشاءات العامة للمباني السكنية",
+        "activityDescriptionEn" : "Construction of all types of residential buildings",
+        "isPreLicenseIssued" : false,
+        "isPostLicenseIssued" : false
+      }, {
+        "activityID" : "410023",
+        "activityDescriptionAr" : "الإنشاءات العامة للمباني الحكومية",
+        "activityDescriptionEn" : "General constructions of government buildings",
+        "isPreLicenseIssued" : false,
+        "isPostLicenseIssued" : false
+      }, {
+        "activityID" : "410030",
+        "activityDescriptionAr" : "إنشاءات المباني الجاهزة في المواقع",
+        "activityDescriptionEn" : "Erection of prefabricated constructions on the site",
+        "isPreLicenseIssued" : false,
+        "isPostLicenseIssued" : false
+      }, {
+        "activityID" : "410040",
+        "activityDescriptionAr" : "ترميمات المباني السكنية والغير سكنية",
+        "activityDescriptionEn" : "remodeling or renovating existing residential and non residential structures",
+        "isPreLicenseIssued" : false,
+        "isPostLicenseIssued" : false
+      } ]
+    },
+    "entityAddress" : {
+      "addressType" : {
+        "addressTypeID" : {
+          "labels" : {
+            "ar" : "معرف نوع العنوان",
+            "en" : "Address Type ID"
+          },
+          "values" : {
+            "ar" : "1",
+            "en" : "1"
+          }
+        },
+        "addressTypeDescription" : {
+          "labels" : {
+            "ar" : "وصف نوع العنوان",
+            "en" : "Address Type Description"
+          },
+          "values" : {
+            "ar" : "عنوان وطني",
+            "en" : "National Address"
+          }
+        }
+      },
+      "nationalAddress" : {
+        "city" : {
+          "cityId" : {
+            "labels" : {
+              "ar" : "معرف المدينة",
+              "en" : "City ID"
+            },
+            "values" : {
+              "ar" : "3",
+              "en" : "3"
+            }
+          },
+          "cityName" : {
+            "labels" : {
+              "ar" : "اسم المدينة",
+              "en" : "City Name"
+            },
+            "values" : {
+              "ar" : "الرياض",
+              "en" : "RIYADH"
+            }
+          }
+        },
+        "district" : {
+          "districtId" : {
+            "labels" : {
+              "ar" : "معرف الحي",
+              "en" : "District ID"
+            },
+            "values" : {
+              "ar" : "10100003032",
+              "en" : "10100003032"
+            }
+          },
+          "districtName" : {
+            "labels" : {
+              "ar" : "اسم الحي",
+              "en" : "District Name"
+            },
+            "values" : {
+              "ar" : "حي الفاروق",
+              "en" : "Al Farooq Dist."
+            }
+          }
+        },
+        "streetName" : {
+          "labels" : {
+            "ar" : "اسم الشارع",
+            "en" : "Street Name"
+          },
+          "values" : {
+            "ar" : "أسد السنة",
+            "en" : "Asad Al Sunah"
+          }
+        },
+        "buildingNo" : {
+          "labels" : {
+            "ar" : "رقم المبنى",
+            "en" : "Building No"
+          },
+          "values" : {
+            "ar" : "6543",
+            "en" : "6543"
+          }
+        },
+        "unitNo" : {
+          "labels" : {
+            "ar" : "رقم الوحدة",
+            "en" : "Unit No"
+          },
+          "values" : {
+            "ar" : "1",
+            "en" : "1"
+          }
+        },
+        "postalCode" : {
+          "labels" : {
+            "ar" : "الرمز البريدي",
+            "en" : "Postal Code"
+          },
+          "values" : {
+            "ar" : "12864",
+            "en" : "12864"
+          }
+        },
+        "additionalNo" : {
+          "labels" : {
+            "ar" : "الرقم الإضافي",
+            "en" : "Additional No"
+          },
+          "values" : {
+            "ar" : "3468",
+            "en" : "3468"
+          }
+        }
+      },
+      "fullAddress" : {
+        "labels" : {
+          "ar" : "العنوان الكامل",
+          "en" : "Full Address"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      }
+    },
+    "capitalDetails" : {
+      "labels" : {
+        "ar" : null,
+        "en" : "Capital Details"
+      },
+      "values" : {
+        "ar" : null,
+        "en" : null
+      }
+    },
+    "contactInformation" : {
+      "phoneNo" : {
+        "labels" : {
+          "ar" : "رقم الهاتف",
+          "en" : "Phone No"
+        },
+        "values" : {
+          "ar" : "0112455517",
+          "en" : "0112455517"
+        }
+      },
+      "mobileNo" : {
+        "labels" : {
+          "ar" : "رقم الجوال",
+          "en" : "Mobile No"
+        },
+        "values" : {
+          "ar" : "0553872008",
+          "en" : "0553872008"
+        }
+      },
+      "email" : {
+        "labels" : {
+          "ar" : "البريد الإلكتروني",
+          "en" : "Email"
+        },
+        "values" : {
+          "ar" : "rabayah@hotmail.com",
+          "en" : "rabayah@hotmail.com"
+        }
+      },
+      "websiteURL" : {
+        "labels" : {
+          "ar" : "رابط الموقع الإلكتروني",
+          "en" : "Website URL"
+        },
+        "values" : {
+          "ar" : null,
+          "en" : null
+        }
+      }
+    },
+    "mangmentInformation" : {
+      "managementStructure" : {
+        "managementStructureID" : {
+          "labels" : {
+            "ar" : "معرف هيكل الإدارة",
+            "en" : "Management Structure ID"
+          },
+          "values" : {
+            "ar" : 6,
+            "en" : 6
+          }
+        },
+        "managementStructureDescription" : {
+          "labels" : {
+            "ar" : "وصف هيكل الإدارة",
+            "en" : "Management Structure Description"
+          },
+          "values" : {
+            "ar" : "مدير فأكثر",
+            "en" : "One or More Managers"
+          }
+        }
+      },
+      "managerList" : [ {
+        "managerRef" : "-",
+        "identifierTypeId" : 1,
+        "identifierNumber" : "-",
+        "nationalityId" : 113,
+        "isLicensed" : false,
+        "managerType" : {
+          "managerTypeID" : 1,
+          "managerTypeDescriptionAr" : "فرد سعودي",
+          "managerTypeDescriptionEn" : "Citizen"
+        },
+        "personInfo" : {
+          "identifierNo" : "-",
+          "titleAr" : null,
+          "titleEn" : null,
+          "firstNameAr" : "عثمان",
+          "fatherNameAr" : "محمد",
+          "grandFatherNameAr" : "عوض",
+          "familyNameAr" : "العمري",
+          "firstNameEn" : "OTHMAN",
+          "fatherNameEn" : "MOHAMMED",
+          "grandFatherNameEn" : "AWADH",
+          "familyNameEn" : "ALAMRI",
+          "identifierType" : {
+            "identifierTypeID" : 1,
+            "identifierTypeDescAr" : "هوية وطنية",
+            "identifierTypeDescEn" : "National ID"
+          },
+          "nationality" : {
+            "nationalityID" : 113,
+            "nationalityDescriptionAr" : "السعودية",
+            "nationalityDescriptionEn" : "Saudi Arabia",
+            "isSaudi" : true,
+            "isGulf" : true
+          }
+        },
+        "managerPositionList" : [ ]
+      } ]
+    },
+    "liquidatorList" : [ ]
+  },
+  "error" : null
+}
