@@ -87,6 +87,9 @@ public class CRReport {
             JsonNode arValue =
                     values.get("ar");
 
+                    
+            
+
             section.addField(
                     key,
                     new CRField(

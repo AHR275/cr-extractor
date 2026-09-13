@@ -13,7 +13,9 @@ public class Translator  {
         // =========================
         // CR Information
         // =========================
-
+        translations.put("false","لا");
+        translations.put("true","نعم");
+        translations.put("null","-");
         translations.put("Is Restricted", "مقيد");
         translations.put("CR National Number", "الرقم الوطني الموحد");
         translations.put("CR Number", "رقم السجل التجاري");

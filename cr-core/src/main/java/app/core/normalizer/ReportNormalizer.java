@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 import app.core.translator.Translator;
 
@@ -14,7 +15,7 @@ public class ReportNormalizer implements Normalizer {
     private final Translator translator = new Translator();
 
     @Override
-    public JsonNode normalize(JsonNode data) {
+    public ObjectNode normalize(JsonNode data) {
 
         ObjectNode result =
                 JsonNodeFactory.instance.objectNode();
@@ -70,11 +71,11 @@ public class ReportNormalizer implements Normalizer {
             String labelAr =
                     translator.translate(fieldName);
 
-            JsonNode valueAr =
-                    data.get(fieldKey + "Ar");
+            JsonNode valueAr = data.get(fieldKey + "Ar");
+            JsonNode valueEn = data.get(fieldKey + "En");
 
-            JsonNode valueEn =
-                    data.get(fieldKey + "En");
+
+                
 
             // No Ar/En pair
             if (valueAr == null && valueEn == null) {
@@ -123,40 +124,48 @@ public class ReportNormalizer implements Normalizer {
         return field;
     }
 
+        public String normalizeJSON(String json, String link) {
 
-    public String normalizeJSON(String json) {
-
-        ObjectMapper mapper =
-                new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         try {
 
-            JsonNode root =
-                    mapper.readTree(json);
+                JsonNode root = mapper.readTree(json);
 
-            JsonNode data =
-                    root.get("data");
+                ObjectNode data = (ObjectNode) root.get("data");
 
-            JsonNode error =
-                    root.get("error");
+                JsonNode error = root.get("error");
 
-            JsonNode normalizedData =
-                    normalize(data);
+                // Add link to data BEFORE normalization
+                ObjectNode linkObject = mapper.createObjectNode();
 
-            ObjectNode result =
-                    mapper.createObjectNode();
+                linkObject.put("ar", link);
+                linkObject.put("en", link);
 
-            result.set("data", normalizedData);
-            result.set("error", error);
+                data.set("link", linkObject);
 
-            return mapper.writeValueAsString(result);
+                // Now normalize everything, including link
+                ObjectNode normalizedData =
+                        (ObjectNode) normalize(data);
+
+                // Create final result
+                ObjectNode result =
+                        mapper.createObjectNode();
+
+                result.set("data", normalizedData);
+                result.set("error", error);
+
+                // Keep the outer link as metadata
+                result.put("link", link);
+
+                return mapper.writeValueAsString(result);
 
         } catch (JsonProcessingException e) {
 
-            throw new RuntimeException(
-                    "Failed to normalize JSON",
-                    e
-            );
+                throw new RuntimeException(
+                        "Failed to normalize JSON",
+                        e
+                );
         }
-    }
+        }
 }

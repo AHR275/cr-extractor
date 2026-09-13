@@ -58,7 +58,6 @@ public class ExtractionService {
 
 
 
-
 public String extract(Path file) {
 
     Document document = loader.load(file);
@@ -66,26 +65,36 @@ public String extract(Path file) {
     String qr;
 
     if (document instanceof ImageDocument image) {
-
         qr = processImage(image);
 
     } else if (document instanceof PDFDocument pdf) {
-
         qr = processPDF(pdf);
 
     } else {
-
-        throw new RuntimeException(
-            "Unsupported document type"
-        );
+        throw new RuntimeException("Unsupported document type");
     }
-    
-    String json = handleQRData(qr);
-    String normalizedJson = reportNormalizer.normalizeJSON(json);
-    // System.out.println(normalizedJson.topre);
-    JReportWriter.save(normalizedJson);
-    return json; 
+
+    return updatingData(qr);
 }
+
+public String updatingData(String link) {
+
+    try {
+        String json = callJsonFromLink(link);
+
+        String normalizedJson =
+                reportNormalizer.normalizeJSON(json,link);
+
+        JReportWriter.save(normalizedJson);
+
+        return "Data has been saved , please check Reports page ";
+
+    } catch (Exception e) {
+        throw new RuntimeException("Couldn't save the data", e);
+    }
+}
+
+
 
 
 
@@ -160,33 +169,35 @@ public String extract(Path file) {
 
 
 
-    private String handleQRData(
-            String qrData
+    private String callJsonFromLink(
+            String link
     ){
 
 
         System.out.println(
-            "QR DATA:"
+            "Link DATA:"
         );
 
 
-        // System.out.println(qrData);
+        System.out.println(link);
 
 
 
-        if(qrData.startsWith("https://")){
+        if(link.startsWith("https://")){
 
 
-            return webClient.fetch(qrData);
+            return webClient.fetch(link);
 
         }
 
 
 
-        return qrData;
+        return link;
 
 
     }
+
+    
 
 
 }

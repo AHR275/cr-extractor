@@ -12,6 +12,7 @@ app\core\normalizer\Normalizer.class
 app\core\normalizer\ReportNormalizer.class
 app\core\extraction\PDFExtractor.class
 app\core\models\CRReport.class
+app\config\AppConfig.class
 app\core\documents\PDFDocument.class
 app\core\web\WebClient.class
 app\core\models\SummaryCRReport.class

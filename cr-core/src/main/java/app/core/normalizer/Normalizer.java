@@ -13,11 +13,9 @@ public interface Normalizer<T> {
     T normalize(JsonNode data);
     default  String normalizeName(String key) {
 
-        String result =
-                key.replaceAll(
-                        "([a-z])([A-Z])",
-                        "$1 $2"
-                );
+        String result = key
+        .replaceAll("([a-z])([A-Z])", "$1 $2")
+        .replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");
 
         result =
                 Character.toUpperCase(result.charAt(0))
@@ -27,7 +25,7 @@ public interface Normalizer<T> {
         result = result.replaceAll("\\bId\\b", "ID");
         result = result.replaceAll("\\bUrl\\b", "URL");
         result = result.replaceAll("\\bIsic\\b", "ISIC");
-        result = result.replaceAll("\\bDesc\\b", "Descritpion");
+        result = result.replaceAll("\\bDesc\\b", "Description");
         
 
         return result;

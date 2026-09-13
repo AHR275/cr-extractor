@@ -1,15 +1,13 @@
 package app.desktop.components;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import app.core.models.SummaryCRReport;
 import app.core.services.CRRepoertService;
-
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-
-import java.nio.file.Path;
-import java.util.List;
-import java.util.function.Consumer;
 
 
 public class ReportsCardsComponent extends BorderPane {
@@ -45,7 +43,7 @@ public class ReportsCardsComponent extends BorderPane {
     private void loadReports() {
 
         List<SummaryCRReport> reports =
-                reportService.getReports();
+                reportService.getSummaryReports();
 
         for (SummaryCRReport report : reports) {
 
