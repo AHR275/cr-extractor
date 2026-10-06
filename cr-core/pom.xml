@@ -8,21 +8,25 @@
         <version>1.0.0</version>
     </parent>
 
-
     <artifactId>cr-core</artifactId>
+
     <dependencies>
 
+        <!-- PDF -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
             <version>${pdfbox.version}</version>
         </dependency>
 
+        <!-- JSON -->
         <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.20.0</version>
-    </dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- QR -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -35,12 +39,13 @@
             <version>${zxing.version}</version>
         </dependency>
 
+        <!-- HTTP / HTML -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
         </dependency>
-    </dependencies>
 
+    </dependencies>
 
 </project>

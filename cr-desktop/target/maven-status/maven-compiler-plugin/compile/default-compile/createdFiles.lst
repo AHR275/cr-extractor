@@ -1,6 +1,7 @@
 app\desktop\scenes\ExtractionScene.class
 app\desktop\controllers\NavigationController.class
 app\desktop\scenes\ReportsScene.class
+app\desktop\components\UploadedFilesSection.class
 app\desktop\components\ReportsCardsComponent.class
 app\desktop\scenes\MainScene.class
 app\desktop\controllers\ReportsController.class

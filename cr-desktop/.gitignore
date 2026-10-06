@@ -1,0 +1,5 @@
+./app-image 
+./jpackage-temp
+./jpackage-exe-temp
+./installer
+./test-runtime

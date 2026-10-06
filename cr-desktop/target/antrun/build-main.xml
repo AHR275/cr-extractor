@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <copy file="C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-desktop\target/cr-desktop-1.0.0.jar" todir="C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-desktop\target/jpackage-input" />
+  </target>
+</project>

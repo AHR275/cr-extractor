@@ -109,7 +109,7 @@ public class CRRepoertService {
                 .asText(); 
 
             return new SummaryCRReport(
-                    directory,   // important: DIRECTORY
+                    directory.getParent(),   // important: DIRECTORY
                     crNumber,
                     companyName,
                     status,
@@ -137,7 +137,8 @@ public List<CRReport> getReports(
 
     List<CRReport> copies = new ArrayList<>();
 
-    Path directory = summaryReport.getDirectory();
+    Path directory = summaryReport.getDirectory().resolve("versions");
+
 
     System.out.println("Directory: " + directory);
 

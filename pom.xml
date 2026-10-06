@@ -23,91 +23,43 @@
 
     <properties>
 
-        <project.build.sourceEncoding>
-            UTF-8
-        </project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <maven.compiler.source>
-            21
-        </maven.compiler.source>
+        <!-- Build with Java 25 -->
+        <maven.compiler.release>25</maven.compiler.release>
+        <java.version>25</java.version>
 
-        <maven.compiler.target>
-            21
-        </maven.compiler.target>
+        <javafx.version>24</javafx.version>
 
-        <java.version>
-            21
-        </java.version>
-
-        <javafx.version>
-            24
-        </javafx.version>
-
-        <jackson.version>
-            2.20.0
-        </jackson.version>
-
-        <pdfbox.version>
-            3.0.5
-        </pdfbox.version>
-
-        <jsoup.version>
-            1.21.1
-        </jsoup.version>
-
-        <zxing.version>
-            3.5.3
-        </zxing.version>
-
-        <playwright.version>
-            1.55.0
-        </playwright.version>
-
-        <junit.version>
-            5.13.4
-        </junit.version>
+        <jackson.version>2.20.0</jackson.version>
+        <pdfbox.version>3.0.5</pdfbox.version>
+        <jsoup.version>1.21.1</jsoup.version>
+        <zxing.version>3.5.3</zxing.version>
+        <playwright.version>1.55.0</playwright.version>
+        <junit.version>5.13.4</junit.version>
 
     </properties>
 
     <build>
-    <pluginManagement>
-        <plugins>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
+        <pluginManagement>
 
-                <configuration>
-                    <release>21</release>
-                </configuration>
-            </plugin>
+            <plugins>
 
-          
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
 
-        </plugins>
-    </pluginManagement>
-    <plugins>
-        <plugin>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-maven-plugin</artifactId>
-            <version>0.0.8</version>
+                    <configuration>
+                        <release>${maven.compiler.release}</release>
+                    </configuration>
+                </plugin>
 
-            <configuration>
-                <mainClass>
-                    desktop.Main
-                </mainClass>
-            </configuration>
+            </plugins>
 
-        </plugin>
-    </plugins>
+        </pluginManagement>
 
-      <resources>
-        <resource>
-            <directory>sources</directory>
-        </resource>
-    </resources>
-
-</build>
+    </build>
 
 </project>
