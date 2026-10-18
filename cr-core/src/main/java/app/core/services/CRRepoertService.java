@@ -83,7 +83,7 @@ public class CRRepoertService {
 
             String crNumber =
                     information
-                        .get("crNumber")
+                        .get("crNationalNumber")
                         .get("values")
                         .get("en")
                         .asText();

@@ -6,6 +6,10 @@ C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\m
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\documents\FileDocument.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\documents\ImageDocument.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\documents\PDFDocument.java
+C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\export\Exporter.java
+C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\export\ExportFormat.java
+C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\export\PDFExporter.java
+C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\export\XLSXEporter.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\extraction\PDFExtractor.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\extraction\QRExtractor.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\models\CRField.java
@@ -16,8 +20,10 @@ C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\m
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\models\UploadedFile.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\normalizer\Normalizer.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\normalizer\ReportNormalizer.java
+C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\normalizer\XLSXNormalizer.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\parsing\JsonReportWriter.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\services\CRRepoertService.java
+C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\services\ExportingService.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\services\ExtractionService.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\services\UploadingFilesService.java
 C:\Users\AHR275\programming folders\gitHub Repository\cr-extractor\cr-core\src\main\java\app\core\translator\Translator.java
