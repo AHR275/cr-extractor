@@ -3,3 +3,5 @@
 ./jpackage-exe-temp
 ./installer
 ./test-runtime
+# Maven build output
+**/target/
