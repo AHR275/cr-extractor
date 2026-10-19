@@ -36,6 +36,12 @@ public class UploadingFilesService {
 public List<UploadedFile> getUploadedFiles(Path reportPath) {
 
     List<UploadedFile> ufs = new ArrayList<>();
+    try {
+        
+        Files.createDirectories(reportPath.resolve("uploads"));
+    } catch (Exception e) {
+        System.out.println("wrong : "+ e.getMessage());
+    }
 
     Path uploadsPath = reportPath.resolve("uploads");
 

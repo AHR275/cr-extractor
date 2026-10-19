@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import app.core.export.ExportFormat;
 import app.core.models.CRField;
 import app.core.models.CRReport;
 import app.core.models.CRSection;
@@ -13,7 +14,6 @@ import app.core.models.UploadedFile;
 import app.core.services.CRRepoertService;
 import app.core.services.UploadingFilesService;
 import app.desktop.controllers.ReportsController;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -89,6 +89,29 @@ public class ReportDetailsComponent extends BorderPane {
             }
 
         });
+
+        Button XlxsExportButton = new Button("export as excel ");
+        XlxsExportButton.setOnAction((actionEvent) -> {
+                
+            if (this.currentReport != null ) {
+
+                reportsController.exportingReport(header, this.currentReport.getFile(), ExportFormat.XLSX);
+                        
+                
+            }
+        });
+        Button PDFExportButton = new Button("export as pdf  ");
+        PDFExportButton.setOnAction((actionEvent) -> {
+                
+            if (this.currentReport != null ) {
+
+                reportsController.exportingReport(header, this.currentReport.getFile(), ExportFormat.PDF);
+                        
+                
+            }
+        });
+
+        
 
 
         Button uploadFileButton =
@@ -243,6 +266,8 @@ public class ReportDetailsComponent extends BorderPane {
                 .addAll(
                         updateButton,
                         uploadFileButton,
+                        XlxsExportButton,
+                        PDFExportButton,
                         topBar
                 );
 

@@ -32,7 +32,7 @@ public class JsonReportWriter {
             String crNumber = root
                     .path("data")
                     .path("crInformation")
-                    .path("crNumber")
+                    .path("crNationalNumber")
                     .path("values")
                     .path("en")
                     .asText(null);
@@ -45,8 +45,10 @@ public class JsonReportWriter {
 
             // One folder for each CR
             Path crDirectory = reportDirectory.resolve(crNumber+"/versions");
+            Path crDirectoryUploads = reportDirectory.resolve(crNumber+"/uploads");
 
             Files.createDirectories(crDirectory);
+            Files.createDirectories(crDirectoryUploads);
 
             // Find latest saved report
             Path latestReport = findLatestReport(crDirectory);

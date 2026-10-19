@@ -15,6 +15,8 @@ public final class AppConfig {
 
     public static final Path APP_DATA =
             DOCUMENTS.resolve("CR Extractor");
+    public static final Path EXPORTED_REPORTS  = 
+            APP_DATA.resolve("Exported Reports");
 
     public static final Path REPORTS =
             APP_DATA.resolve("Reports");
