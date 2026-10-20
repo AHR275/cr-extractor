@@ -114,8 +114,15 @@ public class XLSXEporter implements   Exporter {
 
             CellStyle titleStyle = createTitleStyle(workbook);
             CellStyle headerStyle = createHeaderStyle(workbook);
+
             CellStyle labelStyle = createLabelStyle(workbook);
             CellStyle valueStyle = createValueStyle(workbook);
+
+            CellStyle arabicLabelStyle = createLabelStyle(workbook);
+            arabicLabelStyle.setAlignment(HorizontalAlignment.RIGHT);
+
+            CellStyle arabicValueStyle = createValueStyle(workbook);
+            arabicValueStyle.setAlignment(HorizontalAlignment.RIGHT);
 
             Set<String> usedSheetNames = new HashSet<>();
 
@@ -135,7 +142,9 @@ public class XLSXEporter implements   Exporter {
                         titleStyle,
                         headerStyle,
                         labelStyle,
-                        valueStyle
+                        valueStyle,
+                        arabicLabelStyle,
+                        arabicValueStyle
                 );
             }
 
@@ -157,12 +166,13 @@ public class XLSXEporter implements   Exporter {
             CellStyle titleStyle,
             CellStyle headerStyle,
             CellStyle labelStyle,
-            CellStyle valueStyle
+            CellStyle valueStyle,
+            CellStyle arabicLabelStyle,
+            CellStyle arabicValueStyle
     ) {
-
         int rowIndex = 0;
 
-        // Main worksheet title.
+        // Worksheet title
         Row titleRow = sheet.createRow(rowIndex++);
         titleRow.setHeightInPoints(30);
 
@@ -176,163 +186,97 @@ public class XLSXEporter implements   Exporter {
                 new CellRangeAddress(0, 0, 0, 3)
         );
 
-        // Bilingual key-value fields.
-        if (!model.fields().isEmpty()) {
+        String[] headers = {
+                "English Field",
+                "English Value",
+                "القيمة بالعربية",
+                "الحقل بالعربية"
+        };
 
-            Row header = sheet.createRow(rowIndex++);
-
-            String[] headers = {
-                    "English Field",
-                    "English Value",
-                    "الحقل بالعربية",
-                    "القيمة بالعربية"
-            };
-
-            for (int column = 0; column < headers.length; column++) {
-                Cell cell = header.createCell(column);
-                if (column >= headers.length/2){
-
-                    cell.setCellValue(headers[(headers.length+1)- column]);
-                }else{
-
-                    cell.setCellValue(headers[column]);
-                }
-                cell.setCellStyle(headerStyle);
-            }
-
-            for (XlsxField field : model.fields()) {
-
-                Row row = sheet.createRow(rowIndex++);
-                
-                valueStyle.setAlignment(HorizontalAlignment.LEFT);
-                labelStyle.setAlignment(HorizontalAlignment.LEFT);
-
-                setTextCell(
-                        row.createCell(0),
-                        field.labelEn(),
-                        labelStyle
-                );
-
-                setJsonCell(
-                        row.createCell(1),
-                        field.valueEn(),
-                        valueStyle
-                );
-                labelStyle.setAlignment(HorizontalAlignment.RIGHT);
-                valueStyle.setAlignment(HorizontalAlignment.RIGHT);
-
-                setTextCell(
-                        row.createCell(3),
-                        field.labelAr(),
-                        labelStyle
-                );
-
-                setJsonCell(
-                        row.createCell(2),
-                        field.valueAr(),
-                        valueStyle
-                );
-            }
-        }
-
-        // Array-based tables, such as activities.
+        // Every sheet contains tables only.
         for (XlsxTable table : model.tables()) {
 
             if (rowIndex > 1) {
                 rowIndex++;
             }
 
-            int columnCount = table.columns().size();
-
-            if (columnCount == 0) {
-                continue;
-            }
-
-            int totalColumns = columnCount * 2;
-
+            // Table title
             Row tableTitleRow = sheet.createRow(rowIndex++);
-            Cell tableTitle = tableTitleRow.createCell(0);
+            tableTitleRow.setHeightInPoints(24);
 
+            Cell tableTitle = tableTitleRow.createCell(0);
             tableTitle.setCellValue(
                     table.titleEn() + " / " + table.titleAr()
             );
             tableTitle.setCellStyle(titleStyle);
 
-            if (totalColumns > 1) {
-                sheet.addMergedRegion(
-                        new CellRangeAddress(
-                                tableTitleRow.getRowNum(),
-                                tableTitleRow.getRowNum(),
-                                0,
-                                totalColumns - 1
-                        )
-                );
+            sheet.addMergedRegion(
+                    new CellRangeAddress(
+                            tableTitleRow.getRowNum(),
+                            tableTitleRow.getRowNum(),
+                            0,
+                            3
+                    )
+            );
+
+            // Detect whether the normalizer already included a header row.
+            boolean hasHeader = !table.rows().isEmpty()
+                    && isHeaderRow(table.rows().get(0));
+
+            // Write the header exactly once.
+            Row headerRow = sheet.createRow(rowIndex++);
+
+            for (int column = 0; column < headers.length; column++) {
+                Cell cell = headerRow.createCell(column);
+
+                if (hasHeader) {
+                    setJsonCell(
+                            cell,
+                            table.rows().get(0).cells().get(column).value(),
+                            headerStyle
+                    );
+                } else {
+                    cell.setCellValue(headers[column]);
+                    cell.setCellStyle(headerStyle);
+                }
             }
 
-            // English columns first; Arabic columns on the right.
-            
-Row tableHeader = sheet.createRow(rowIndex++);
+            // Skip the existing header row when present.
+            int firstDataRow = hasHeader ? 1 : 0;
 
-for (int i = 0; i < columnCount; i++) {
+            for (int i = firstDataRow; i < table.rows().size(); i++) {
+                XlsxField field = table.rows().get(i);
 
-    // English columns: left to right
-    Cell englishHeader = tableHeader.createCell(i);
-    englishHeader.setCellValue(table.columns().get(i).labelEn());
-    englishHeader.setCellStyle(headerStyle);
+                Row row = sheet.createRow(rowIndex++);
 
-    // Arabic columns: reverse order, right to left
-    int arabicIndex = columnCount - 1 - i;
+                for (int column = 0; column < 4; column++) {
+                    Cell cell = row.createCell(column);
 
-    Cell arabicHeader = tableHeader.createCell(columnCount + i);
-    arabicHeader.setCellValue(
-            table.columns().get(arabicIndex).labelAr()
-    );
-    arabicHeader.setCellStyle(headerStyle);
-}
+                    JsonNode value = column < field.cells().size()
+                            ? field.cells().get(column).value()
+                            : null;
 
-   
-for (var tableRow : table.rows()) {
+                    CellStyle style = switch (column) {
+                        case 0 -> labelStyle;
+                        case 1 -> valueStyle;
+                        case 2 -> arabicValueStyle;
+                        case 3 -> arabicLabelStyle;
+                        default -> valueStyle;
+                    };
 
-    Row row = sheet.createRow(rowIndex++);
-
-    // English values
-    for (int i = 0; i < columnCount; i++) {
-        setJsonCell(
-                row.createCell(i),
-                tableRow.get(i).valueEn(),
-                valueStyle
-        );
-    }
-
-    // Arabic values, in reverse column order
-    for (int i = 0; i < columnCount; i++) {
-        int arabicIndex = columnCount - 1 - i;
-
-        setJsonCell(
-                row.createCell(columnCount + i),
-                tableRow.get(arabicIndex).valueAr(),
-                valueStyle
-        );
-    }
-}
-
+                    setJsonCell(cell, value, style);
+                }
+            }
         }
 
-        // Four fixed columns for key-value sections.
-        sheet.setColumnWidth(0, 45 * 300);
-        sheet.setColumnWidth(1, 45 * 300);
-        sheet.setColumnWidth(2, 45 * 300);
-        sheet.setColumnWidth(3, 45 * 300);
-
-        // Give additional columns reasonable widths for tables.
-        for (int column = 4; column < sheet.getRow(0)
-                .getLastCellNum(); column++) {
-            sheet.setColumnWidth(column, 25 * 256);
+        // Four columns shared by every table.
+        for (int column = 0; column < 4; column++) {
+            sheet.setColumnWidth(column, 45 * 256);
         }
 
-        sheet.createFreezePane(0, 1);
+        // Freeze the worksheet title and first table's header.
+        sheet.createFreezePane(0, 2);
     }
-
     private void setTextCell(
             Cell cell,
             String value,
@@ -470,4 +414,28 @@ for (var tableRow : table.rows()) {
 
         return candidate;
     }
+
+    private boolean isHeaderRow(XlsxField row) {
+    if (row.cells().size() < 4) {
+        return false;
+    }
+
+    String[] expected = {
+            "En Field",
+            "En Value",
+            "Ar Value",
+            "Ar Field"
+    };
+
+    for (int i = 0; i < expected.length; i++) {
+        JsonNode value = row.cells().get(i).value();
+
+        if (value == null
+                || !expected[i].equals(value.asText())) {
+            return false;
+        }
+    }
+
+    return true;
+}
 }

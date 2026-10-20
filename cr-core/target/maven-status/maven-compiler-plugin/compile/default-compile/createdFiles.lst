@@ -5,7 +5,6 @@ app\core\models\NormalizedField.class
 app\core\normalizer\XLSXNormalizer.class
 app\core\documents\ImageDocument.class
 app\core\normalizer\Normalizer.class
-app\core\normalizer\XLSXNormalizer$ColumnDefinition.class
 app\core\services\UploadingFilesService.class
 app\core\normalizer\ReportNormalizer.class
 app\core\normalizer\XLSXNormalizer$XlsxField.class
@@ -24,7 +23,6 @@ app\core\export\PDFExporter.class
 app\core\models\CRSection.class
 app\core\export\ExportFormat.class
 app\core\documents\DocumentType.class
-app\core\normalizer\XLSXNormalizer$XlsxColumn.class
 app\core\normalizer\XLSXNormalizer$XlsxWorkbook.class
 app\core\documents\FileDocument.class
 app\core\normalizer\XLSXNormalizer$SectionContent.class

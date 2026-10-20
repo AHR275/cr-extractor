@@ -3,7 +3,6 @@ package app.core.normalizer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -25,64 +24,70 @@ public class XLSXNormalizer
      * wrapper containing a "data" object.
      */
     @Override
-    public XlsxWorkbook normalize(JsonNode input) {
-        Objects.requireNonNull(input, "Input cannot be null");
+public XlsxWorkbook normalize(JsonNode input) {
+    Objects.requireNonNull(input, "Input cannot be null");
 
-        JsonNode data = input;
+    JsonNode data = input.path("data").isObject()
+            ? input.path("data")
+            : input;
 
-        if (input.path("data").isObject()) {
-            data = input.path("data");
-        }
-
-        if (!data.isObject()) {
-            throw new IllegalArgumentException(
-                    "CR report data must be a JSON object"
-            );
-        }
-
-        List<XlsxSheet> sheets = new ArrayList<>();
-        Iterator<Map.Entry<String, JsonNode>> sections = data.fields();
-
-        while (sections.hasNext()) {
-            Map.Entry<String, JsonNode> section = sections.next();
-
-            String key = section.getKey();
-            JsonNode value = section.getValue();
-
-            if ("error".equals(key) || value == null || value.isNull()) {
-                continue;
-            }
-
-            String titleEn = humanize(key);
-            String titleAr = translate(titleEn);
-
-            SectionContent content = new SectionContent();
-
-            if (value.isArray()) {
-                content.tables.add(
-                        createTable(key, titleEn, titleAr, value)
-                );
-            } else if (isField(value)) {
-                content.fields.add(createField(key, value));
-            } else if (value.isObject()) {
-                collectContent(value, "", "", content);
-            } else {
-                content.fields.add(createRawField(key, value));
-            }
-
-            if (!content.fields.isEmpty() || !content.tables.isEmpty()) {
-                sheets.add(new XlsxSheet(
-                        key,
-                        titleEn,
-                        titleAr,
-                        content.fields,
-                        content.tables
-                ));
-            }
-        }
-
-        return new XlsxWorkbook(sheets);
+    if (!data.isObject()) {
+        throw new IllegalArgumentException(
+                "CR report data must be a JSON object"
+        );
     }
+
+    List<XlsxSheet> sheets = new ArrayList<>();
+    Iterator<Map.Entry<String, JsonNode>> sections = data.fields();
+
+    while (sections.hasNext()) {
+        Map.Entry<String, JsonNode> section = sections.next();
+
+        String key = section.getKey();
+        JsonNode value = section.getValue();
+
+        if ("error".equals(key) || value == null || value.isNull()) {
+            continue;
+        }
+
+        String titleEn = humanize(key);
+        String titleAr = translate(titleEn);
+
+        SectionContent content = new SectionContent();
+
+        if (value.isArray()) {
+            content.tables.add(
+                    createTable(titleEn, titleAr, value)
+            );
+        } else if (isField(value)) {
+            content.fields.add(createField(key, value));
+        } else if (value.isObject()) {
+            collectContent(value, "", "", content);
+        } else {
+            content.fields.add(createRawField(key, value));
+        }
+
+        // Move all standalone fields into one table.
+        if (!content.fields.isEmpty()) {
+            content.tables.add(new XlsxTable(
+                    titleEn + " Fields",
+                    titleAr + " الحقول",
+                    content.fields
+            ));
+        }
+
+        if (!content.tables.isEmpty()) {
+            sheets.add(new XlsxSheet(
+                    key,
+                    titleEn,
+                    titleAr,
+                    content.tables
+            ));
+        }
+    }
+
+    return new XlsxWorkbook(sheets);
+}
 
     /**
      * Recursively collects fields and nested tables from a JSON object.
@@ -103,15 +108,16 @@ public class XLSXNormalizer
         }
 
         if (node.isArray()) {
-            String titleEn = pathEn.isBlank() ? "Items" : pathEn;
-            String titleAr = pathAr.isBlank()
-                    ? translate(titleEn)
-                    : pathAr;
+                String titleEn = pathEn.isBlank() ? "Items" : pathEn;
+                String titleAr = pathAr.isBlank()
+                        ? translate(titleEn)
+                        : pathAr;
 
-            content.tables.add(
-                    createTable(pathEn, titleEn, titleAr, node)
-            );
-            return;
+                content.tables.add(
+                        createTable(titleEn, titleAr, node)
+                );
+
+                return;
         }
 
         if (node.isObject()) {
@@ -149,236 +155,104 @@ public class XLSXNormalizer
     }
 
     private XlsxField createField(
-            String pathEn,
-            String pathAr,
-            JsonNode field
-    ) {
-        JsonNode labels = field.path("labels");
-        JsonNode values = field.path("values");
+        String pathEn,
+        String pathAr,
+        JsonNode field
+) {
+    JsonNode labels = field.path("labels");
+    JsonNode values = field.path("values");
 
-        String labelEn = text(labels.path("en"), humanize(pathEn));
-        String labelAr = text(
-                labels.path("ar"),
-                translate(humanize(pathEn))
-        );
+    String labelEn = text(
+            labels.path("en"),
+            humanize(pathEn)
+    );
 
-        return new XlsxField(
-                join(pathEn, labelEn),
-                values.get("en"),
-                join(pathAr, labelAr),
-                values.get("ar")
-        );
-    }
+    String labelAr = text(
+            labels.path("ar"),
+            translate(humanize(pathEn))
+    );
+
+    return new XlsxField(List.of(
+            new XlsxCell(TextNode.valueOf(
+                    join(pathEn, labelEn)
+            )),
+            new XlsxCell(values.get("en")),
+            new XlsxCell(values.get("ar")),
+            new XlsxCell(TextNode.valueOf(
+                    join(pathAr, labelAr)
+            ))
+    ));
+}
+
 
     private XlsxField createRawField(String key, JsonNode value) {
         return createRawField(key, "", value);
     }
+private XlsxField createRawField(
+        String keyEn,
+        String keyAr,
+        JsonNode value
+) {
+    String labelEn = humanize(keyEn);
+    String labelAr = keyAr == null || keyAr.isBlank()
+            ? translate(labelEn)
+            : keyAr;
 
-    private XlsxField createRawField(
-            String keyEn,
-            String keyAr,
-            JsonNode value
-    ) {
-        String labelEn = humanize(keyEn);
-        String labelAr = keyAr == null || keyAr.isBlank()
-                ? translate(labelEn)
-                : keyAr;
-
-        return new XlsxField(labelEn, value, labelAr, value);
-    }
-
-    /**
+    return new XlsxField(List.of(
+            new XlsxCell(TextNode.valueOf(labelEn)),
+            new XlsxCell(value),
+            new XlsxCell(value),
+            new XlsxCell(TextNode.valueOf(labelAr))
+    ));
+}    /**
      * Builds either a regular horizontal table or a vertical key/value table.
      *
      * Both layouts use the same recursive field-collection method.
      * Manager-list records are represented vertically; other arrays retain
      * the existing horizontal layout.
      */
-    private XlsxTable createTable(
-            String key,
-            String titleEn,
-            String titleAr,
-            JsonNode array
-    ) {
-        boolean vertical = isManagerList(key)
-                || isManagerList(titleEn);
+private XlsxTable createTable(
+        String titleEn,
+        String titleAr,
+        JsonNode array
+) {
+    List<XlsxField> rows = new ArrayList<>();
 
-        Map<String, ColumnDefinition> definitions = new LinkedHashMap<>();
-        List<Map<String, XlsxCell>> flattenedRows = new ArrayList<>();
+    // Header row
+    rows.add(new XlsxField(List.of(
+            new XlsxCell(TextNode.valueOf("En Field")),
+            new XlsxCell(TextNode.valueOf("En Value")),
+            new XlsxCell(TextNode.valueOf("Ar Value")),
+            new XlsxCell(TextNode.valueOf("Ar Field"))
+    )));
 
-        for (JsonNode item : array) {
-            List<TableEntry> entries = new ArrayList<>();
+    for (JsonNode item : array) {
+        List<TableEntry> entries = new ArrayList<>();
 
-            collectTableFields(item, "", "", entries);
+        collectTableFields(item, "", "", entries);
 
-            Map<String, XlsxCell> row = new LinkedHashMap<>();
+        for (TableEntry entry : entries) {
+            String keyEn = join(
+                    entry.pathEn(),
+                    entry.labelEn()
+            );
 
-            for (TableEntry entry : entries) {
-                String columnKey = entry.pathEn().isBlank()
-                        ? "value"
-                        : entry.pathEn();
+            String keyAr = join(
+                    entry.pathAr(),
+                    entry.labelAr()
+            );
 
-                definitions.putIfAbsent(
-                        columnKey,
-                        new ColumnDefinition(
-                                entry.labelEn(),
-                                entry.labelAr()
-                        )
-                );
-
-                row.put(
-                        columnKey,
-                        new XlsxCell(
-                                entry.valueEn(),
-                                entry.valueAr()
-                        )
-                );
-            }
-
-            if (vertical) {
-                for (TableEntry entry : entries) {
-                    String keyEn = join(
-                            entry.pathEn(),
-                            entry.labelEn()
-                    );
-
-                    String keyAr = join(
-                            entry.pathAr(),
-                            entry.labelAr()
-                    );
-
-                    row.put(
-                            "\u0000manager-key-" + entries.indexOf(entry),
-                            new XlsxCell(
-                                    TextNode.valueOf(keyEn),
-                                    TextNode.valueOf(keyAr)
-                            )
-                    );
-                }
-
-                // Store each collected entry as a separate key/value row.
-                for (TableEntry entry : entries) {
-                    String keyEn = join(
-                            entry.pathEn(),
-                            entry.labelEn()
-                    );
-
-                    String keyAr = join(
-                            entry.pathAr(),
-                            entry.labelAr()
-                    );
-
-                    row.put(
-                            "\u0000manager-value-" + entries.indexOf(entry),
-                            new XlsxCell(
-                                    entry.valueEn(),
-                                    entry.valueAr()
-                            )
-                    );
-                }
-            }
-
-            flattenedRows.add(row);
+            rows.add(new XlsxField(List.of(
+                    new XlsxCell(TextNode.valueOf(keyEn)),
+                    new XlsxCell(entry.valueEn()),
+                    new XlsxCell(entry.valueAr()),
+                    new XlsxCell(TextNode.valueOf(keyAr))
+            )));
         }
-
-        return createVerticalTable(
-                titleEn,
-                titleAr,
-                array
-        );
-        // if (vertical) {
-        // }
-
-        // List<XlsxColumn> columns = new ArrayList<>();
-
-        // for (Map.Entry<String, ColumnDefinition> entry
-        //         : definitions.entrySet()) {
-
-        //     ColumnDefinition definition = entry.getValue();
-
-        //     columns.add(new XlsxColumn(
-        //             entry.getKey(),
-        //             definition.labelEn(),
-        //             definition.labelAr()
-        //     ));
-        // }
-
-        // List<List<XlsxCell>> rows = new ArrayList<>();
-
-        // for (Map<String, XlsxCell> flattenedRow : flattenedRows) {
-        //     List<XlsxCell> row = new ArrayList<>();
-
-        //     for (XlsxColumn column : columns) {
-        //         XlsxCell cell = flattenedRow.get(column.key());
-
-        //         row.add(cell != null ? cell : new XlsxCell(null, null));
-        //     }
-
-        //     rows.add(row);
-        // }
-
-        // return new XlsxTable(titleEn, titleAr, columns, rows);
-    }
-   
-    /**
-     * Uses the same collected field representation to create vertical rows.
-     * Each record's properties become separate Key/Value rows.
-     */
-    private XlsxTable createVerticalTable(
-            String titleEn,
-            String titleAr,
-            JsonNode array
-    ) {
-        List<XlsxColumn> columns = List.of(
-                new XlsxColumn("key", "English Field ", " الحقل بالعربية "),
-                new XlsxColumn("value", "English Value", " القيمة بالعربية ")
-        );
-
-        List<List<XlsxCell>> rows = new ArrayList<>();
-
-        for (JsonNode item : array) {
-            List<TableEntry> entries = new ArrayList<>();
-
-            collectTableFields(item, "", "", entries);
-
-            for (TableEntry entry : entries) {
-                String keyEn = join(
-                        entry.pathEn(),
-                        entry.labelEn()
-                );
-
-                String keyAr = join(
-                        entry.pathAr(),
-                        entry.labelAr()
-                );
-
-                rows.add(List.of(
-                        new XlsxCell(
-                                TextNode.valueOf(keyEn),
-                                TextNode.valueOf(keyAr)
-                        ),
-                        new XlsxCell(
-                                entry.valueEn(),
-                                entry.valueAr()
-                        )
-                ));
-            }
-            rows.add(List.of(
-                        new XlsxCell(
-                                TextNode.valueOf(" "),
-                                TextNode.valueOf(" ")
-                        ),
-                        new XlsxCell(
-                                TextNode.valueOf(" "),
-                                TextNode.valueOf(" ")
-                        )
-                ));
-        }
-
-        return new XlsxTable(titleEn, titleAr, columns, rows);
     }
 
-    /**
+    return new XlsxTable(titleEn, titleAr, rows);
+}    /**
      * Recursively collects table fields while preserving both languages.
      * This method is shared by horizontal and vertical table layouts.
      */
@@ -457,22 +331,7 @@ public class XLSXNormalizer
         ));
     }
 
-    private boolean isManagerList(String keyOrTitle) {
-        if (keyOrTitle == null || keyOrTitle.isBlank()) {
-            return false;
-        }
-
-        String lastSegment = keyOrTitle.substring(
-                keyOrTitle.lastIndexOf(" / ") + 3
-        );
-
-        String normalized = lastSegment
-                .replaceAll("[\\s_/-]", "")
-                .toLowerCase();
-
-        return normalized.equals("managerlist");
-    }
-
+   
     private String humanize(String key) {
         if (key == null || key.isBlank()) {
             return "";
@@ -529,10 +388,7 @@ public class XLSXNormalizer
         private final List<XlsxTable> tables = new ArrayList<>();
     }
 
-    private record ColumnDefinition(
-            String labelEn,
-            String labelAr
-    ) {}
+    
 
     private record TableEntry(
             String pathEn,
@@ -544,55 +400,38 @@ public class XLSXNormalizer
     ) {}
 
     // Excel-ready model
-
-    public record XlsxWorkbook(List<XlsxSheet> sheets) {
-        public XlsxWorkbook {
-            sheets = List.copyOf(sheets);
-        }
+public record XlsxWorkbook(List<XlsxSheet> sheets) {
+    public XlsxWorkbook {
+        sheets = List.copyOf(sheets);
     }
+}
 
-    public record XlsxSheet(
-            String key,
-            String titleEn,
-            String titleAr,
-            List<XlsxField> fields,
-            List<XlsxTable> tables
-    ) {
-        public XlsxSheet {
-            fields = List.copyOf(fields);
-            tables = List.copyOf(tables);
-        }
+public record XlsxSheet(
+        String key,
+        String titleEn,
+        String titleAr,
+        List<XlsxTable> tables
+) {
+    public XlsxSheet {
+        tables = List.copyOf(tables);
     }
+}
 
-    public record XlsxField(
-            String labelEn,
-            JsonNode valueEn,
-            String labelAr,
-            JsonNode valueAr
-    ) {}
-
-    public record XlsxTable(
-            String titleEn,
-            String titleAr,
-            List<XlsxColumn> columns,
-            List<List<XlsxCell>> rows
-    ) {
-        public XlsxTable {
-            columns = List.copyOf(columns);
-            rows = rows.stream()
-                    .map(List::copyOf)
-                    .toList();
-        }
+public record XlsxTable(
+        String titleEn,
+        String titleAr,
+        List<XlsxField> rows
+) {
+    public XlsxTable {
+        rows = List.copyOf(rows);
     }
+}
 
-    public record XlsxColumn(
-            String key,
-            String labelEn,
-            String labelAr
-    ) {}
+public record XlsxField(List<XlsxCell> cells) {
+    public XlsxField {
+        cells = List.copyOf(cells);
+    }
+}
 
-    public record XlsxCell(
-            JsonNode valueEn,
-            JsonNode valueAr
-    ) {}
+public record XlsxCell(JsonNode value) {}
 }

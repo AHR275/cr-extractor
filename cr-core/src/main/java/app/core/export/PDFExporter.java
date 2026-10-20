@@ -10,19 +10,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openhtmltopdf.bidi.support.ICUBidiReorderer;
 import com.openhtmltopdf.bidi.support.ICUBidiSplitter;
+import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.TextDirection;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import app.core.normalizer.XLSXNormalizer;
-import app.core.normalizer.XLSXNormalizer.XlsxCell;
 import app.core.normalizer.XLSXNormalizer.XlsxField;
 import app.core.normalizer.XLSXNormalizer.XlsxSheet;
 import app.core.normalizer.XLSXNormalizer.XlsxTable;
 import app.core.normalizer.XLSXNormalizer.XlsxWorkbook;
-
-
-import com.openhtmltopdf.bidi.support.ICUBidiReorderer;
-import com.openhtmltopdf.bidi.support.ICUBidiSplitter;
-import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.TextDirection;
 
 
 
@@ -173,212 +168,200 @@ try {
 
     }
 
-    private String buildHtml(XlsxWorkbook workbook) {
-        StringBuilder html = new StringBuilder();
+   private String buildHtml(XlsxWorkbook workbook) {
+    StringBuilder html = new StringBuilder();
 
-        html.append("""
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8"/>
-                    <style>
-                        @page {
-                            size: A4;
-                            margin: 18mm 14mm;
-                        }
+    html.append("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8"/>
+                <style>
+                    @page {
+                        size: A4;
+                        margin: 18mm 14mm;
+                    }
 
-                        body {
-                            font-family: "Noto Sans Arabic", sans-serif;
-                            font-size: 10pt;
-                            color: #222;
-                        }
+                    body {
+                        font-family: "Noto Sans Arabic", sans-serif;
+                        font-size: 10pt;
+                        color: #222;
+                    }
 
-                        .ar {
-                            font-family: "Noto Sans Arabic", sans-serif;
-                            direction: rtl;
-                            text-align: right;
-                        }
+                    .ar {
+                        font-family: "Noto Sans Arabic", sans-serif;
+                        direction: rtl;
+                        text-align: right;
+                    }
 
-                        .en {
-                            direction: ltr;
-                            text-align: left;
-                        }
+                    .en {
+                        direction: ltr;
+                        text-align: left;
+                    }
 
-                        h1 {
-                            font-size: 20pt;
-                            text-align: center;
-                            margin-bottom: 24px;
-                        }
+                    h1 {
+                        font-size: 20pt;
+                        text-align: center;
+                        margin-bottom: 24px;
+                    }
 
-                        h2 {
-                            font-size: 15pt;
-                            border-bottom: 2px solid #555;
-                            padding-bottom: 6px;
-                            margin-top: 24px;
-                        }
+                    h2 {
+                        font-size: 15pt;
+                        border-bottom: 2px solid #555;
+                        padding-bottom: 6px;
+                        margin-top: 24px;
+                    }
 
-                        h3 {
-                            font-size: 12pt;
-                            margin-top: 18px;
-                        }
+                    h3 {
+                        font-size: 12pt;
+                        margin-top: 18px;
+                    }
 
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin: 8px 0 18px;
-                        }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 8px 0 18px;
+                        table-layout: fixed;
+                    }
 
-                        th, td {
-                            border: 1px solid #bbb;
-                            padding: 6px;
-                            vertical-align: top;
-                            overflow-wrap: anywhere;
-                        }
+                    th, td {
+                        border: 1px solid #bbb;
+                        padding: 6px;
+                        vertical-align: top;
+                        overflow-wrap: anywhere;
+                    }
 
-                        th {
-                            background-color: #eee;
-                        }
+                    th {
+                        background-color: #eee;
+                    }
 
-                        tr {
-                            page-break-inside: avoid;
-                        }
+                    th:nth-child(3),
+                    th:nth-child(4) {
+                        direction: rtl;
+                        text-align: right;
+                    }
 
-                        .section {
-                            page-break-before: auto;
-                        }
+                    tr {
+                        page-break-inside: avoid;
+                    }
 
-                        .ar {
-                            direction: rtl;
-                            text-align: right;
-                        }
+                    .heading-ar {
+                        direction: rtl;
+                        unicode-bidi: embed;
+                        display: inline-block;
+                        margin-left: 12px;
+                    }
 
-                        .en {
-                            direction: ltr;
-                            text-align: left;
-                        }
+                    .heading-en {
+                        direction: ltr;
+                        display: inline-block;
+                    }
+                </style>
+            </head>
+            <body>
+            """);
 
-                        .secondary {
-                            color: #555;
-                            font-size: 9pt;
-                        }
-                    </style>
-                </head>
-                <body>
-                """);
+    html.append("<h1>CR Extractor Report</h1>");
 
-        html.append("<h1>CR Extractor Report</h1>");
+    for (XlsxSheet sheet : workbook.sheets()) {
+        html.append("<div class=\"section\">");
 
-        for (XlsxSheet sheet : workbook.sheets()) {
-            html.append("<div class=\"section\">");
+        html.append("<h2>")
+                .append(bilingualHeading(
+                        sheet.titleEn(),
+                        sheet.titleAr()
+                ))
+                .append("</h2>");
 
-            html.append("<h2>")
-                    .append(bilingual(sheet.titleEn(), sheet.titleAr()))
-                    .append("</h2>");
+        appendTables(html, sheet);
 
-            appendFields(html, sheet);
-            appendTables(html, sheet);
-
-            html.append("</div>");
-        }
-
-        html.append("</body></html>");
-
-        return html.toString();
+        html.append("</div>");
     }
 
-    private void appendFields(
-            StringBuilder html,
-            XlsxSheet sheet
-    ) {
-        if (sheet.fields().isEmpty()) {
-            return;
+    html.append("</body></html>");
+
+    return html.toString();
+}
+private void appendTables(
+        StringBuilder html,
+        XlsxSheet sheet
+) {
+    String[] headers = {
+        "English Field",
+        "English Value",
+        "القيمة بالعربية",
+        "الحقل بالعربية"
+    };
+
+    for (XlsxTable table : sheet.tables()) {
+        html.append("<h3>")
+                .append(bilingualHeading(
+                        table.titleEn(),
+                        table.titleAr()
+                ))
+                .append("</h3>");
+
+        html.append("<table>");
+
+        // Render the same four-column header for every table.
+        html.append("<thead><tr>");
+
+        for (int i = 0; i < headers.length; i++) {
+            html.append("<th>")
+                    .append(escape(headers[i]))
+                    .append("</th>");
         }
 
-        html.append("""
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Field / الحقل</th>
-                            <th>Value / القيمة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                """);
+        html.append("</tr></thead><tbody>");
 
-        for (XlsxField field : sheet.fields()) {
-            html.append("<tr><td>")
-                    .append(bilingual(
-                            field.labelEn(),
-                            field.labelAr()
-                    ))
-                    .append("</td><td>")
-                    .append(bilingual(
-                            value(field.valueEn()),
-                            value(field.valueAr())
-                    ))
-                    .append("</td></tr>");
+        // Array tables already contain a header row from the normalizer.
+        // Skip that row because the exporter renders its own header.
+        int startIndex = !table.rows().isEmpty()
+                && isHeaderRow(table.rows().get(0))
+                ? 1
+                : 0;
+
+        for (int i = startIndex; i < table.rows().size(); i++) {
+            XlsxField row = table.rows().get(i);
+
+            html.append("<tr>");
+
+            for (int column = 0; column < 4; column++) {
+                JsonNode cellValue = column < row.cells().size()
+                        ? row.cells().get(column).value()
+                        : null;
+
+                String cssClass = column == 2 || column == 3
+                        ? "ar"
+                        : "en";
+
+                html.append("<td class=\"")
+                        .append(cssClass)
+                        .append("\">")
+                        .append(escape(value(cellValue)));
+
+                html.append("</td>");
+            }
+
+            html.append("</tr>");
         }
 
         html.append("</tbody></table>");
     }
-
-    private void appendTables(
-            StringBuilder html,
-            XlsxSheet sheet
-    ) {
-        for (XlsxTable table : sheet.tables()) {
-            html.append("<h3>")
-                    .append(bilingual(
-                            table.titleEn(),
-                            table.titleAr()
-                    ))
-                    .append("</h3>");
-
-            html.append("<table><thead><tr>");
-
-            for (var column : table.columns()) {
-                html.append("<th>")
-                        .append(bilingual(
-                                column.labelEn(),
-                                column.labelAr()
-                        ))
-                        .append("</th>");
-            }
-
-            html.append("</tr></thead><tbody>");
-
-            for (var row : table.rows()) {
-                html.append("<tr>");
-
-                for (XlsxCell cell : row) {
-                    html.append("<td>")
-                            .append(bilingual(
-                                    value(cell.valueEn()),
-                                    value(cell.valueAr())
-                            ))
-                            .append("</td>");
-                }
-
-                html.append("</tr>");
-            }
-
-            html.append("</tbody></table>");
-        }
-    }
-
+}
     private String bilingual(String english, String arabic) {
         StringBuilder result = new StringBuilder();
 
         if (english != null && !english.isBlank()) {
-            result.append("<div class=\"en\">")
+            result.append("<td class=\"en\">")
                     .append(escape(english))
-                    .append("</div>");
+                    .append("</td>");
         }
 
         if (arabic != null && !arabic.isBlank()) {
-            result.append("<div class=\"ar\"  >")
+            result.append("<td class=\"ar\"  >")
                     .append(escape(normalizeArabic(arabic)))
-                    .append("</div>");
+                    .append("</td>");
         }
 
         return result.toString();
@@ -433,4 +416,46 @@ try {
 
         return destination;
     }
+
+
+    private boolean isHeaderRow(XlsxField row) {
+    if (row.cells().size() < 4) {
+        return false;
+    }
+
+    String[] expected = {
+        "En Field",
+        "En Value",
+        "Ar Value",
+        "Ar Field"
+    };
+
+    for (int i = 0; i < expected.length; i++) {
+        JsonNode node = row.cells().get(i).value();
+
+        if (node == null || !expected[i].equals(node.asText())) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+private String bilingualHeading(String english, String arabic) {
+    StringBuilder result = new StringBuilder();
+
+    if (english != null && !english.isBlank()) {
+        result.append("<span class=\"heading-en\">")
+                .append(escape(english))
+                .append("</span>");
+    }
+
+    if (arabic != null && !arabic.isBlank()) {
+        result.append("<span class=\"heading-ar\">")
+                .append(escape(normalizeArabic(arabic)))
+                .append("</span>");
+    }
+
+    return result.toString();
+}
 }
