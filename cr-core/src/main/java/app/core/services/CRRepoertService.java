@@ -15,6 +15,11 @@ import app.config.AppConfig;
 import app.core.models.CRReport;
 import app.core.models.SummaryCRReport;
 
+import java.text.Normalizer;
+import java.util.Locale;
+
+import app.core.models.ReportSearchCriteria;
+
 public class CRRepoertService {
 
     private Path reportDirectory;
@@ -94,6 +99,12 @@ public class CRRepoertService {
                         .get("values")
                         .get("en")
                         .asText();
+            String OwnerName = 
+                information 
+                    .get("ownerName")
+                    .get("values")
+                    .get("en")
+                    .asText(); 
 
             String status =
                     information
@@ -112,6 +123,7 @@ public class CRRepoertService {
                     directory.getParent(),   // important: DIRECTORY
                     crNumber,
                     companyName,
+                    OwnerName,
                     status,
                     encNumber,
                     root
@@ -228,4 +240,64 @@ private Path findLatestCopy(Path directory)
             return 0;
         }
     }
+
+
+
+
+// Add these methods inside CRRepoertService.
+
+public List<SummaryCRReport> searchReports(
+        ReportSearchCriteria criteria
+) {
+    if (criteria == null) {
+        criteria = ReportSearchCriteria.empty();
+    }
+
+    String query = normalize(criteria.query());
+    String crNumber = normalize(criteria.crNumber());
+    String companyName = normalize(criteria.companyName());
+    String status = normalize(criteria.status());
+
+    return getSummaryReports().stream()
+            .filter(report ->
+                    query.isEmpty()
+                    || contains(report.getCrNumber(), query)
+                    || contains(report.getCompanyName(), query)
+                    || contains(report.getStatus(), query)
+            )
+            .filter(report ->
+                    crNumber.isEmpty()
+                    || contains(report.getCrNumber(), crNumber)
+            )
+            .filter(report ->
+                    companyName.isEmpty()
+                    || contains(report.getCompanyName(), companyName)
+            )
+            .filter(report ->
+                    status.isEmpty()
+                    || contains(report.getStatus(), status)
+            )
+            .toList();
+}
+
+private boolean contains(String value, String query) {
+    return normalize(value).contains(query);
+}
+
+private String normalize(String value) {
+    if (value == null || value.isBlank()) {
+        return "";
+    }
+
+    return Normalizer.normalize(value, Normalizer.Form.NFKC)
+            .toLowerCase(Locale.ROOT)
+            .strip()
+            .replace('\u0640', ' ')
+            .replace('أ', 'ا')
+            .replace('إ', 'ا')
+            .replace('آ', 'ا')
+            .replace('ى', 'ي')
+            .replaceAll("\\s+", " ");
+}
+
 }

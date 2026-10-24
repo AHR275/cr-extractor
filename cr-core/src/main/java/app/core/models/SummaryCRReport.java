@@ -9,6 +9,7 @@ public class SummaryCRReport {
     private final Path directory;
     private final String crNumber;
     private final String companyName;
+    private final String ownerName ; 
     private final String status;
     private final String encNumber ; 
     private final JsonNode data;
@@ -17,6 +18,7 @@ public class SummaryCRReport {
             Path directory,
             String crNumber,
             String companyName,
+            String ownerName,
             String status,
             String encNumber, 
             JsonNode data) {
@@ -27,6 +29,7 @@ public class SummaryCRReport {
         this.status = status;
         this.data = data;
         this.encNumber = encNumber; 
+        this.ownerName = ownerName; 
     }
 
     public Path getDirectory() {
@@ -37,8 +40,12 @@ public class SummaryCRReport {
         return crNumber;
     }
 
-    public String getEntityFullName() {
+    public String getCompanyName() {
         return companyName;
+    }
+
+    public String getOwnerName(){
+        return ownerName; 
     }
 
     public String getStatus() {
@@ -47,6 +54,7 @@ public class SummaryCRReport {
     public String getEncNumber() {
         return encNumber;
     }
+
 
     public JsonNode getData() {
         return data;

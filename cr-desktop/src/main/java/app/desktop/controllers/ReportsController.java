@@ -3,11 +3,17 @@ package app.desktop.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 
 import app.config.AppConfig;
 import app.core.export.ExportFormat;
+import app.core.models.CRReport;
+import app.core.models.ReportSearchCriteria;
+import app.core.models.SummaryCRReport;
+import app.core.models.UploadedFile;
+import app.core.services.CRRepoertService;
 import app.core.services.ExportingService;
 import app.core.services.ExtractionService;
 import app.core.services.UploadingFilesService;
@@ -17,7 +23,12 @@ import javafx.stage.FileChooser;
 public class ReportsController {
     private final ExtractionService extractionService = new ExtractionService();
     private  final  UploadingFilesService ufs = new UploadingFilesService(); 
-    private final ExportingService exs = new ExportingService(); 
+    private final ExportingService exs = new ExportingService();
+    private final CRRepoertService reportService = new CRRepoertService();  
+
+    private SummaryCRReport selectedReport;
+    
+
 
     private final Path EXPORTED_REPORTS_PATH  = AppConfig.EXPORTED_REPORTS;
     public ReportsController(){
@@ -143,8 +154,68 @@ public  File chooseFile(Node source) {
     }
 
 
+
+// Return all cached report summaries.
+public List<SummaryCRReport> getSummaryReports() {
+    return reportService.getSummaryReports();
+}
+
+// Search cached summaries.
+public List<SummaryCRReport> searchReports(
+        ReportSearchCriteria criteria
+) {
+    return reportService.searchReports(criteria);
+}
+
+// Reload summaries after a report is created or updated.
+// public void refreshSummaryReports() {
+//     reportService.refreshSummaryReports();
+// }
+
+// Load the versions belonging to one summary report.
+public List<CRReport> getReports(
+        SummaryCRReport summaryReport
+) {
+    if (summaryReport == null) {
+        return List.of();
+    }
+
+    return reportService.getReports(summaryReport);
+}
+
+// Load uploaded files for a report directory.
+public List<UploadedFile> getUploadedFiles(Path reportDirectory) {
+    if (reportDirectory == null) {
+        return List.of();
+    }
+
+    return ufs.getUploadedFiles(reportDirectory);
+}
+
+
+
+
+
+
+    public SummaryCRReport getSelectedReport() {
+        return selectedReport;
+    }
+
+    public void setSelectedReport(SummaryCRReport selectedReport) {
+        this.selectedReport = selectedReport;
+
+        System.out.println("selected report  : "+  selectedReport.getCompanyName());
+
+
+        
+    }
+
+    
+}
+
+
     
 
 
 
-}
+

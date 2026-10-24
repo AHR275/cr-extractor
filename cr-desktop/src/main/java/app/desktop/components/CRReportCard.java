@@ -23,7 +23,7 @@ public class CRReportCard extends VBox {
         getStyleClass().add("report-card");
 
         Label name =
-                new Label(report.getEntityFullName());
+                new Label(report.getCompanyName());
 
         name.getStyleClass().add(
                 "report-card-title"

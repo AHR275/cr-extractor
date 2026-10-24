@@ -1,6 +1,6 @@
+
 package app.desktop.components;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,944 +11,434 @@ import app.core.models.CRReport;
 import app.core.models.CRSection;
 import app.core.models.SummaryCRReport;
 import app.core.models.UploadedFile;
-import app.core.services.CRRepoertService;
-import app.core.services.UploadingFilesService;
 import app.desktop.controllers.ReportsController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
-
+import app.desktop.ctx.ControllersContexts;
 public class ReportDetailsComponent extends BorderPane {
 
     private SummaryCRReport summaryReport;
-
-    private List<CRReport> reports =
-            new ArrayList<>();
-
+    private List<CRReport> reports = new ArrayList<>();
     private CRReport currentReport;
 
-    private final CRRepoertService crRepoertService =
-            new CRRepoertService();
+    private final ReportsController reportsController ; 
 
-    private final UploadingFilesService uploadingFilesService =
-            new UploadingFilesService();
+    private final VBox content = new VBox(20);
+    private final HBox actionBar = new HBox(10);
+    private final HBox versionBar = new HBox(10);
+    private final HBox languageBar = new HBox(5);
 
-    private final VBox content;
+    private Button englishButton;
+    private Button arabicButton;
 
-    private final HBox versionBar;
+    private int fieldCount;
+    private int sectionCount;
 
-    private final HBox languageBar;
-
-    private int fieldCount = 0;
-
-    private int sectionCount = 0;
-
-    private final ReportsController reportsController =
-            new ReportsController();
-
-    private File selectedFile;
-
-    /*
-     * true  = English
-     * false = Arabic
-     */
     private boolean english = true;
 
-
-    public ReportDetailsComponent() {
-
-        getStyleClass().add(
-                "report-details"
-        );
-
-
-        // =====================================================
-        // Top navigation
-        // =====================================================
-
-        VBox header =
-                new VBox();
-
-
-        Button updateButton =
-                new Button("update report data");
-
-        updateButton.setOnAction(event -> {
-
-            if (summaryReport != null) {
-
-                reportsController.updateReport(
-                        summaryReport.getEncNumber()
-                );
-            }
-
-        });
-
-        Button XlxsExportButton = new Button("export as excel ");
-        XlxsExportButton.setOnAction((actionEvent) -> {
-                
-            if (this.currentReport != null ) {
-
-                reportsController.exportingReport(header, this.currentReport.getFile(), ExportFormat.XLSX);
-                        
-                
-            }
-        });
-        Button PDFExportButton = new Button("export as pdf  ");
-        PDFExportButton.setOnAction((actionEvent) -> {
-                
-            if (this.currentReport != null ) {
-
-                reportsController.exportingReport(header, this.currentReport.getFile(), ExportFormat.PDF);
-                        
-                
-            }
-        });
-
-        
-
-
-        Button uploadFileButton =
-                new Button("upload a file");
-
-        uploadFileButton.setOnAction(event -> {
-
-            if (summaryReport != null) {
-
-                reportsController.uploadFile(
-                        header,
-                        summaryReport.getDirectory()
-                );
-
-                /*
-                 * Refresh the uploaded files section after
-                 * uploading a file.
-                 */
-                showReport();
-            }
-
-        });
-
-
-        HBox topBar =
-                new HBox(20);
-
-        topBar.setPadding(
-                new Insets(10)
-        );
-
-        topBar.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        topBar.getStyleClass().add(
-                "report-top-bar"
-        );
-
-
-        // =====================================================
-        // Version navigation
-        // =====================================================
-
-        versionBar =
-                new HBox(10);
-
-        versionBar.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        versionBar.getStyleClass().add(
-                "version-bar"
-        );
-
-
-        // =====================================================
-        // Language navigation
-        // =====================================================
-
-        languageBar =
-                new HBox(5);
-
-        languageBar.setAlignment(
-                Pos.CENTER_RIGHT
-        );
-
-        languageBar.getStyleClass().add(
-                "language-bar"
-        );
-
-
-        Button englishButton =
-                new Button("English");
-
-        Button arabicButton =
-                new Button("العربية");
-
-
-        englishButton.getStyleClass().add(
-                "language-button"
-        );
-
-        arabicButton.getStyleClass().add(
-                "language-button"
-        );
-
-
-        /*
-         * Initially English is selected.
-         */
-        englishButton.getStyleClass().add(
-                "active"
-        );
-
-
-        englishButton.setOnAction(event -> {
-
-            if (!english) {
-
-                english = true;
-
-                updateLanguageButtons();
-
-                showReport();
-            }
-
-        });
-
-
-        arabicButton.setOnAction(event -> {
-
-            if (english) {
-
-                english = false;
-
-                updateLanguageButtons();
-
-                showReport();
-            }
-
-        });
-
-
-        languageBar
-                .getChildren()
-                .addAll(
-                        englishButton,
-                        arabicButton
-                );
-
-
-        /*
-         * Put version navigation on the left
-         * and language navigation on the right.
-         */
-        HBox.setMargin(
-                languageBar,
-                new Insets(0, 0, 0, 10)
-        );
-
-
-        topBar
-                .getChildren()
-                .addAll(
-                        versionBar,
-                        languageBar
-                );
-
-
-        header.getChildren()
-                .addAll(
-                        updateButton,
-                        uploadFileButton,
-                        XlxsExportButton,
-                        PDFExportButton,
-                        topBar
-                );
-
-        setTop(header);
-
-
-        // =====================================================
-        // Report content
-        // =====================================================
-
-        content =
-                new VBox(20);
-
-        content.setPadding(
-                new Insets(20)
-        );
-
-
-        ScrollPane scrollPane =
-                new ScrollPane(content);
-
-        scrollPane.setFitToWidth(true);
-
-        setCenter(scrollPane);
+    public ReportDetailsComponent(ControllersContexts CtrlCtx ) {
+        this.reportsController = CtrlCtx.getReportsController()  ; 
+        getStyleClass().add("report-details");
+
+        createHeader();
+        createContent();
     }
 
-
     // =========================================================
-    // Set report
+    // Header
     // =========================================================
 
-    public void setReport(
-            SummaryCRReport summaryReport
-    ) {
+    private void createHeader() {
+        VBox header = new VBox(10);
+        header.setPadding(new Insets(12));
+        header.getStyleClass().add("report-header");
 
-        this.summaryReport =
-                summaryReport;
+        actionBar.setAlignment(Pos.CENTER_LEFT);
+        actionBar.getStyleClass().add("report-action-bar");
 
+        Button updateButton = new Button("Update report");
+        Button uploadButton = new Button("Upload file");
+        Button excelButton = new Button("Export Excel");
+        Button pdfButton = new Button("Export PDF");
 
-        this.reports =
-                crRepoertService.getReports(
-                        summaryReport
-                );
+        updateButton.setOnAction(event -> updateReport());
+        uploadButton.setOnAction(event -> uploadFile(uploadButton));
 
+        excelButton.setOnAction(event ->
+                exportReport(excelButton, ExportFormat.XLSX));
 
-        if (reports.isEmpty()) {
+        pdfButton.setOnAction(event ->
+                exportReport(pdfButton, ExportFormat.PDF));
 
-            currentReport = null;
+        actionBar.getChildren().addAll(
+                updateButton,
+                uploadButton,
+                excelButton,
+                pdfButton
+        );
 
-        } else {
+        createLanguageButtons();
 
-            // Last one = newest version
-            currentReport =
-                    reports.get(
-                            reports.size() - 1
-                    );
+        versionBar.setAlignment(Pos.CENTER_LEFT);
+        versionBar.getStyleClass().add("version-bar");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox navigationBar = new HBox(10);
+        navigationBar.setAlignment(Pos.CENTER_LEFT);
+        navigationBar.getStyleClass().add("report-navigation-bar");
+
+        navigationBar.getChildren().addAll(
+                versionBar,
+                spacer,
+                languageBar
+        );
+
+        header.getChildren().addAll(actionBar, navigationBar);
+        setTop(header);
+    }
+
+    private void createLanguageButtons() {
+        languageBar.setAlignment(Pos.CENTER_RIGHT);
+        languageBar.getStyleClass().add("language-bar");
+
+        englishButton = new Button("English");
+        arabicButton = new Button("العربية");
+
+        englishButton.getStyleClass().add("language-button");
+        arabicButton.getStyleClass().add("language-button");
+
+        englishButton.setOnAction(event -> changeLanguage(true));
+        arabicButton.setOnAction(event -> changeLanguage(false));
+
+        languageBar.getChildren().addAll(
+                englishButton,
+                arabicButton
+        );
+
+        updateLanguageButtons();
+    }
+
+    private void changeLanguage(boolean useEnglish) {
+        if (english == useEnglish) {
+            return;
         }
 
-
-        createVersionNavigation();
-
+        english = useEnglish;
+        updateLanguageButtons();
         showReport();
     }
 
-
-    // =========================================================
-    // Update language buttons
-    // =========================================================
-
     private void updateLanguageButtons() {
-
-        /*
-         * Get the buttons from the language bar.
-         */
-
-        Button englishButton =
-                (Button) languageBar
-                        .getChildren()
-                        .get(0);
-
-        Button arabicButton =
-                (Button) languageBar
-                        .getChildren()
-                        .get(1);
-
-
-        englishButton
-                .getStyleClass()
-                .remove("active");
-
-        arabicButton
-                .getStyleClass()
-                .remove("active");
-
+        englishButton.getStyleClass().remove("active");
+        arabicButton.getStyleClass().remove("active");
 
         if (english) {
-
-            englishButton
-                    .getStyleClass()
-                    .add("active");
-
+            englishButton.getStyleClass().add("active");
         } else {
-
-            arabicButton
-                    .getStyleClass()
-                    .add("active");
+            arabicButton.getStyleClass().add("active");
         }
     }
 
-
     // =========================================================
-    // Version navigation
+    // Controller actions
     // =========================================================
 
-    private void createVersionNavigation() {
-
-        versionBar
-                .getChildren()
-                .clear();
-
-
-        for (int i = 0;
-             i < reports.size();
-             i++) {
-
-            CRReport report =
-                    reports.get(i);
-
-
-            int version =
-                    i + 1;
-
-
-            Button button =
-                    new Button(
-                            "Version " + version
-                    );
-
-
-            button.getStyleClass().add(
-                    "version-button"
-            );
-
-
-            if (report == currentReport) {
-
-                button.getStyleClass().add(
-                        "active"
-                );
-            }
-
-
-            button.setOnAction(event -> {
-
-                currentReport =
-                        report;
-
-                createVersionNavigation();
-
-                showReport();
-            });
-
-
-            versionBar
-                    .getChildren()
-                    .add(button);
-        }
+   private void updateReport() {
+    if (summaryReport == null) {
+        return;
     }
 
+    reportsController.updateReport(
+            summaryReport.getEncNumber()
+    );
 
-    // =========================================================
-    // Show report
-    // =========================================================
+//     reportsController.refreshSummaryReports();
 
-    private void showReport() {
+    loadReportVersions();
+}
+    private void uploadFile(Node source) {
+        if (summaryReport == null) {
+            return;
+        }
 
-        content
-                .getChildren()
-                .clear();
+        reportsController.uploadFile(
+                source,
+                summaryReport.getDirectory()
+        );
 
+        // Re-render the uploaded-files section.
+        showReport();
+    }
 
+    private void exportReport(Node source, ExportFormat format) {
         if (currentReport == null) {
             return;
         }
 
-
-        CRSection data =
-                currentReport.getData();
-
-
-        fieldCount = 0;
-
-        sectionCount = 0;
-
-
-        /*
-         * =====================================================
-         * CR report
-         * =====================================================
-         */
-
-        renderSection(
-                data,
-                content
-        );
-
-
-        /*
-         * =====================================================
-         * Uploaded files
-         * =====================================================
-         *
-         * Uploaded files are NOT CR fields or CR sections.
-         * They are displayed using their own TableView
-         * component.
-         */
-
-        if (summaryReport != null) {
-
-            List<UploadedFile> uploadedFiles =
-                    uploadingFilesService.getUploadedFiles(
-                            summaryReport.getDirectory()
-                    );
-
-
-            UploadedFilesSection uploadedFilesSection =
-                    new UploadedFilesSection(
-                            uploadedFiles
-                    );
-
-
-            content.getChildren().add(
-                    uploadedFilesSection
-            );
-        }
-
-
-        System.out.println(
-                "fields : " + fieldCount
-        );
-
-        System.out.println(
-                "sections : " + sectionCount
+        reportsController.exportingReport(
+                source,
+                currentReport.getFile(),
+                format
         );
     }
 
+    // =========================================================
+    // Report selection
+    // =========================================================
+
+    public void setReport(SummaryCRReport summaryReport) {
+    this.summaryReport = summaryReport;
+
+    reportsController.setSelectedReport(summaryReport);
+
+    loadReportVersions();
+}
+
+    private void loadReportVersions() {
+        reports = summaryReport == null
+                ? List.of()
+                : reportsController.getReports(summaryReport);
+
+        currentReport = reports.isEmpty()
+                ? null
+                : reports.get(reports.size() - 1);
+
+        createVersionNavigation();
+        showReport();
+    }
+
+    private void createVersionNavigation() {
+        versionBar.getChildren().clear();
+
+        for (int i = 0; i < reports.size(); i++) {
+            CRReport report = reports.get(i);
+            int version = i + 1;
+
+            Button button = new Button("Version " + version);
+            button.getStyleClass().add("version-button");
+
+            if (report == currentReport) {
+                button.getStyleClass().add("active");
+            }
+
+            button.setOnAction(event -> {
+                currentReport = report;
+                createVersionNavigation();
+                showReport();
+            });
+
+            versionBar.getChildren().add(button);
+        }
+    }
 
     // =========================================================
-    // Render section
+    // Content
     // =========================================================
 
-    private void renderSection(
-            CRSection section,
-            VBox parent
-    ) {
+    private void createContent() {
+        content.setPadding(new Insets(20));
 
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
 
-        // =====================================================
-        // Fields directly inside this section
-        // =====================================================
+        setCenter(scrollPane);
+    }
+
+    private void showReport() {
+        content.getChildren().clear();
+
+        fieldCount = 0;
+        sectionCount = 0;
+
+        if (currentReport == null) {
+            Label emptyLabel = new Label("No report version available.");
+            emptyLabel.getStyleClass().add("empty-report-message");
+            content.getChildren().add(emptyLabel);
+            return;
+        }
+
+        CRSection data = currentReport.getData();
+        renderSection(data, content);
+
+        if (summaryReport != null) {
+            List<UploadedFile> uploadedFiles =
+                    reportsController.getUploadedFiles(
+                            summaryReport.getDirectory()
+                    );
+
+            UploadedFilesSection filesSection =
+                    new UploadedFilesSection(uploadedFiles);
+
+            content.getChildren().add(filesSection);
+        }
+
+        System.out.println("Fields: " + fieldCount);
+        System.out.println("Sections: " + sectionCount);
+    }
+
+    // =========================================================
+    // Render sections
+    // =========================================================
+
+    private void renderSection(CRSection section, VBox parent) {
+        if (section == null) {
+            return;
+        }
 
         for (Map.Entry<String, CRField> entry :
                 section.getFields().entrySet()) {
 
-
             fieldCount++;
-
-
-            CRField field =
-                    entry.getValue();
-
-
-            VBox fieldBox =
-                    createField(field);
-
-
-            parent
-                    .getChildren()
-                    .add(fieldBox);
+            parent.getChildren().add(createField(entry.getValue()));
         }
-
-
-        // =====================================================
-        // Child sections
-        // =====================================================
 
         for (Map.Entry<String, CRSection> entry :
                 section.getSections().entrySet()) {
 
-
             sectionCount++;
 
-
-            String sectionName =
-                    entry.getKey();
-
-
-            CRSection child =
-                    entry.getValue();
-
-
-            VBox collapsibleSection =
+            parent.getChildren().add(
                     createCollapsibleSection(
-                            sectionName,
-                            child
-                    );
-
-
-            parent
-                    .getChildren()
-                    .add(
-                            collapsibleSection
-                    );
+                            entry.getKey(),
+                            entry.getValue()
+                    )
+            );
         }
     }
-
-
-    // =========================================================
-    // Create collapsible section
-    // =========================================================
 
     private VBox createCollapsibleSection(
             String name,
             CRSection section
     ) {
+        VBox container = new VBox(5);
+        container.getStyleClass().add("report-section");
 
-        VBox container =
-                new VBox(5);
+        Button header = new Button("▶ " + formatSectionName(name));
+        header.setMaxWidth(Double.MAX_VALUE);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("report-section-button");
 
+        VBox sectionContent = new VBox(10);
+        sectionContent.setPadding(new Insets(10));
+        sectionContent.setVisible(false);
+        sectionContent.setManaged(false);
 
-        container.getStyleClass().add(
-                "report-section"
-        );
-
-
-        // =====================================================
-        // Section header
-        // =====================================================
-
-        Button header =
-                new Button();
-
-
-        header.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-
-        header.setText(
-                "▶ " +
-                formatSectionName(name)
-        );
-
-
-        header.getStyleClass().add(
-                "report-section-button"
-        );
-
-
-        // =====================================================
-        // Section content
-        // =====================================================
-
-        VBox sectionContent =
-                new VBox(10);
-
-
-        sectionContent.setPadding(
-                new Insets(10)
-        );
-
-
-        sectionContent.setVisible(
-                false
-        );
-
-        sectionContent.setManaged(
-                false
-        );
-
-
-        /*
-         * Prevent rendering the section more than once
-         * while this version remains displayed.
-         */
-
-        final boolean[] loaded =
-                { false };
-
-
-        // =====================================================
-        // Click section
-        // =====================================================
+        boolean[] loaded = {false};
 
         header.setOnAction(event -> {
+            boolean expanded = sectionContent.isVisible();
 
-
-            boolean expanded =
-                    sectionContent.isVisible();
-
-
-            // =================================================
-            // Collapse
-            // =================================================
-
-            if (expanded) {
-
-                sectionContent.setVisible(
-                        false
-                );
-
-                sectionContent.setManaged(
-                        false
-                );
-
-
-                header.setText(
-                        "▶ " +
-                        formatSectionName(name)
-                );
-
-
-                return;
-            }
-
-
-            // =================================================
-            // Expand
-            // =================================================
-
-            sectionContent.setVisible(
-                    true
-            );
-
-            sectionContent.setManaged(
-                    true
-            );
-
+            sectionContent.setVisible(!expanded);
+            sectionContent.setManaged(!expanded);
 
             header.setText(
-                    "▼ " +
-                    formatSectionName(name)
+                    (expanded ? "▶ " : "▼ ")
+                            + formatSectionName(name)
             );
 
-
-            // =================================================
-            // Lazy rendering
-            // =================================================
-
-            if (!loaded[0]) {
-
-                renderSection(
-                        section,
-                        sectionContent
-                );
-
+            if (!expanded && !loaded[0]) {
+                renderSection(section, sectionContent);
                 loaded[0] = true;
             }
         });
 
-
-        // =====================================================
-        // Add header + content
-        // =====================================================
-
-        container
-                .getChildren()
-                .addAll(
-                        header,
-                        sectionContent
-                );
-
-
+        container.getChildren().addAll(header, sectionContent);
         return container;
     }
 
-
     // =========================================================
-    // Create field
+    // Render fields
     // =========================================================
 
-    private VBox createField(
-            CRField field
-    ) {
+    private VBox createField(CRField field) {
+        VBox box = new VBox(3);
+        box.getStyleClass().add("report-field");
 
-        VBox box =
-                new VBox(3);
+        String[] labels = field.getLabels();
+        Object[] values = field.getValue();
 
+        int languageIndex = english ? 0 : 1;
 
-        String[] labels =
-                field.getLabels();
+        String label = labels != null
+                && labels.length > languageIndex
+                && labels[languageIndex] != null
+                ? labels[languageIndex]
+                : "-";
 
-        Object[] values =
-                field.getValue();
+        Object value = values != null
+                && values.length > languageIndex
+                ? values[languageIndex]
+                : null;
 
+        Label fieldLabel = new Label(label);
+        fieldLabel.getStyleClass().add("report-field-label");
 
-        box.getStyleClass().add(
-                "report-field"
+        ClickableLabel fieldValue = new ClickableLabel(
+                cleanValue(value)
         );
 
-
-        // =====================================================
-        // Selected language
-        // =====================================================
-
-        int languageIndex =
-                english ? 0 : 1;
-
-
-        String label =
-                labels[languageIndex];
-
-
-        Object value =
-                values[languageIndex];
-
-
-        // =====================================================
-        // Label
-        // =====================================================
-
-        Label fieldLabel =
-                new Label(
-                        label
-                );
-
-
-        fieldLabel.getStyleClass().add(
-                "report-field-label"
-        );
-
-
-        // =====================================================
-        // Value
-        // =====================================================
-
-        ClickableLabel fieldValue =
-                new ClickableLabel(
-                        value == null
-                                ? "-"
-                                : cleanValue(value)
-                );
-
-
-        fieldValue.getStyleClass().add(
-                "report-field-value"
-        );
-
-
-        fieldValue.setWrapText(
-                true
-        );
-
-
-        // =====================================================
-        // Arabic alignment
-        // =====================================================
+        fieldValue.getStyleClass().add("report-field-value");
+        fieldValue.setWrapText(true);
+        fieldValue.setMaxWidth(Double.MAX_VALUE);
 
         if (!english) {
-
-            fieldLabel.setAlignment(
-                    Pos.CENTER_RIGHT
-            );
-
-            fieldValue.setAlignment(
-                    Pos.CENTER_RIGHT
-            );
-
-            box.setAlignment(
-                    Pos.TOP_RIGHT
-            );
+            fieldLabel.setAlignment(Pos.CENTER_RIGHT);
+            fieldValue.setAlignment(Pos.CENTER_RIGHT);
+            box.setAlignment(Pos.TOP_RIGHT);
         }
 
-
-        // =====================================================
-        // Add field
-        // =====================================================
-
-        box
-                .getChildren()
-                .addAll(
-                        fieldLabel,
-                        fieldValue
-                );
-
-
+        box.getChildren().addAll(fieldLabel, fieldValue);
         return box;
     }
 
-
     // =========================================================
-    // Format section name
+    // Formatting helpers
     // =========================================================
 
-    private String formatSectionName(
-            String name
-    ) {
-
-        if (name == null ||
-                name.isEmpty()) {
-
+    private String formatSectionName(String name) {
+        if (name == null || name.isBlank()) {
             return "-";
         }
 
-
-        String result =
-                name.replaceAll(
-                        "([a-z])([A-Z])",
-                        "$1 $2"
-                );
-
-
-        result =
-                Character.toUpperCase(
-                        result.charAt(0)
-                )
+        String result = name.replaceAll("([a-z])([A-Z])", "$1 $2");
+        result = Character.toUpperCase(result.charAt(0))
                 + result.substring(1);
 
-
-        result =
-                result.replaceAll(
-                        "\\bCr\\b",
-                        "CR"
-                );
-
-
-        result =
-                result.replaceAll(
-                        "\\bId\\b",
-                        "ID"
-                );
-
+        result = result.replaceAll("\\bCr\\b", "CR");
+        result = result.replaceAll("\\bId\\b", "ID");
 
         return result;
     }
 
-
-    // =========================================================
-    // Clean value
-    // =========================================================
-
-    private String cleanValue(
-            Object value
-    ) {
-
+    private String cleanValue(Object value) {
         if (value == null) {
-
             return "-";
         }
 
+        String text = String.valueOf(value);
 
-        String text =
-                String.valueOf(value);
-
-
-        /*
-         * Remove surrounding quotes.
-         */
-
-        if (text.length() >= 2 &&
-                text.startsWith("\"") &&
-                text.endsWith("\"")) {
-
-            text =
-                    text.substring(
-                            1,
-                            text.length() - 1
-                    );
+        if (text.length() >= 2
+                && text.startsWith("\"")
+                && text.endsWith("\"")) {
+            text = text.substring(1, text.length() - 1);
         }
-
 
         return text;
     }
 
-
-    // =========================================================
-    // Getter
-    // =========================================================
-
     public SummaryCRReport getSummaryReport() {
-
         return summaryReport;
     }
 }
